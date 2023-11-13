@@ -48,11 +48,6 @@ void readFile(string FileName){
 
 }
 
-void executeJAL(Instructions& inst, int& pc, int* registers) 
-{   
-        registers[inst.rd] = pc; //saves return address (counter i) in rd
-        pc += inst.imm; //updates the program counter to target address
-}
 
 void print()
 {
