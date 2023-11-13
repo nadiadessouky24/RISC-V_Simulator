@@ -1,15 +1,16 @@
-#include <iostream>
-#include <vector>
-#include <map>
 #include "functions.h"
 #include "instructionClass.h"
 #include "global.h"
+#include <iostream>
+#include <vector>
+#include <map>
 using namespace std;
 
 
 
 int main()
 {
+    initialize_map();
     readFile("input.txt");
 
     while(true)
@@ -19,87 +20,22 @@ int main()
             cout<<"gootpi";
             break;
         }
-        
-        // or(done), ori(done), SLL(done), SLLI(done), BNE, BNEQ, LUI, AUIPC, LB, LBU,SW
+        Instructions inst = instructions[i];
+
+        // inst_map[inst.op]
+
+        if( inst_map.find(inst.op) ==inst_map.end() ) // didn't find the key
+        {
+            //wrong instruction given --> handle it here.
+
+            break;
+        }
+
+        (*inst_map[inst.op])(); //call the function
+
+
+        //or(done), ori(done), SLL(done), SLLI(done), BNE, BNEQ, LUI, AUIPC, LB, LBU,SW
         int pc = i*4;
-        if (instructions[i].op == "add")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] + registers[instructions[i].rt];
-            i++;
-        }
-        
-        else if (instructions[i].op == "addi")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] + instructions[i].imm;
-            i++;
-        }
-
-        else if (instructions[i].op == "sub")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] - registers[instructions[i].rt];
-            i++;
-        }
-
-        else if (instructions[i].op == "or")
-        {
-             registers[instructions[i].rd] = registers[instructions[i].rs] | registers[instructions[i].rt];
-             i++;
-        }
-
-        else if (instructions[i].op == "ori")
-        {
-             registers[instructions[i].rd] = registers[instructions[i].rs] | instructions[i].imm;
-             i++;
-        }
-       
-        else if (instructions[i].op == "sll")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] * (2* registers[instructions[i].rt]);
-            i++;
-        }
-
-        else if (instructions[i].op == "slli")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] * (2* instructions[i].imm);
-            i++;
-        }
-        else if (instructions[i].op == "xor")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] ^ registers[instructions[i].rt];
-            i++;
-        }
-        else if (instructions[i].op == "xori")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] ^ instructions[i].imm;
-            i++;
-        }
-        else if (instructions[i].op == "sll")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] * (2 * registers[instructions[i].rt]);
-            i++;
-        }
-
-        else if (instructions[i].op == "slli")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] * (2 * instructions[i].imm);
-            i++;
-        }
-        else if (instructions[i].op == "sra")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] >> registers[instructions[i].rt];
-            i++;
-        }
-        else if (instructions[i].op == "srai")
-        {
-            registers[instructions[i].rd] = registers[instructions[i].rs] >> instructions[i].imm;
-            i++;
-        }
-        else if (instructions[i].op == "jal")
-        {
-            executeJAL(instructions[i], i, registers);
-            i++;
-        }
-
         print();
 
     };
