@@ -63,7 +63,42 @@ int main()
             registers[instructions[i].rd] = registers[instructions[i].rs] * (2* instructions[i].imm);
             i++;
         }
+        else if (instructions[i].op == "xor")
+        {
+            registers[instructions[i].rd] = registers[instructions[i].rs] ^ registers[instructions[i].rt];
+            i++;
+        }
+        else if (instructions[i].op == "xori")
+        {
+            registers[instructions[i].rd] = registers[instructions[i].rs] ^ instructions[i].imm;
+            i++;
+        }
+        else if (instructions[i].op == "sll")
+        {
+            registers[instructions[i].rd] = registers[instructions[i].rs] * (2 * registers[instructions[i].rt]);
+            i++;
+        }
 
+        else if (instructions[i].op == "slli")
+        {
+            registers[instructions[i].rd] = registers[instructions[i].rs] * (2 * instructions[i].imm);
+            i++;
+        }
+        else if (instructions[i].op == "sra")
+        {
+            registers[instructions[i].rd] = registers[instructions[i].rs] >> registers[instructions[i].rt];
+            i++;
+        }
+        else if (instructions[i].op == "srai")
+        {
+            registers[instructions[i].rd] = registers[instructions[i].rs] >> instructions[i].imm;
+            i++;
+        }
+        else if (instructions[i].op == "jal")
+        {
+            executeJAL(instructions[i], i, registers);
+            i++;
+        }
 
         print();
 
