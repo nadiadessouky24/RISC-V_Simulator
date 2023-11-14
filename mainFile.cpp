@@ -26,15 +26,13 @@ int main()
 
         if( inst_map.find(inst.op) ==inst_map.end() ) // didn't find the key
         {
-            //wrong instruction given --> handle it here.
-
             break;
         }
 
         (*inst_map[inst.op])(); //call the function
 
 
-        //or(done), ori(done), SLL(done), SLLI(done), BNE, BNEQ, LUI, AUIPC, LB, LBU,SW
+        // BNE, BNEQ, LUI, AUIPC, LB, LBU,SW
         int pc = i*4;
         print();
 

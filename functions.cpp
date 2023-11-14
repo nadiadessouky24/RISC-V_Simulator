@@ -10,7 +10,8 @@ using namespace std;
 vector<Instructions> instructions;
 
 
-void readFile(string FileName){
+void readFile(string FileName)
+{
     FILE *fp = fopen(FileName.c_str(), "r");
     char line[100];
     Instructions inst;
@@ -46,14 +47,8 @@ void readFile(string FileName){
         instructions.push_back(inst);
     
     }
-
 }
 
-void executeJAL(Instructions& inst, int& pc, int* registers) 
-{   
-        registers[inst.rd] = pc; //saves return address (counter i) in rd
-        pc += inst.imm; //updates the program counter to target address
-}
 
 void print()
 {
@@ -82,76 +77,67 @@ void addi()
     i++;
 }
 
-// void Sub()
-// {
-//     registers[instructions[i].rd] = registers[instructions[i].rs] - registers[instructions[i].rt];
-//     i++;
+void sub()
+{
+    registers[instructions[i].rd] = registers[instructions[i].rs] - registers[instructions[i].rt];
+    i++;
+}
+
+void orfunc()
+{
+        registers[instructions[i].rd] = registers[instructions[i].rs] | registers[instructions[i].rt];
+        i++;
+}
+
+void ori()
+{
+        registers[instructions[i].rd] = registers[instructions[i].rs] | instructions[i].imm;
+        i++;
+}
+
+void sll()
+{
+    registers[instructions[i].rd] = registers[instructions[i].rs] * (2* registers[instructions[i].rt]);
+    i++;
+}
+
+void slli()
+{
+    registers[instructions[i].rd] = registers[instructions[i].rs] * (2* instructions[i].imm);
+    i++;
+}
+void xorfunc()
+{
+    registers[instructions[i].rd] = registers[instructions[i].rs] ^ registers[instructions[i].rt];
+    i++;
+}
+void xori()
+{
+    registers[instructions[i].rd] = registers[instructions[i].rs] ^ instructions[i].imm;
+    i++;
+}
+void sra()
+{
+    registers[instructions[i].rd] = registers[instructions[i].rs] >> registers[instructions[i].rt];
+    i++;
+}
+void srai()
+{
+    registers[instructions[i].rd] = registers[instructions[i].rs] >> instructions[i].imm;
+    i++;
+}
+
+// void executeJAL(Instructions& inst, int& pc, int* registers) 
+// {   
+//         registers[inst.rd] = pc; //saves return address (counter i) in rd
+//         pc += inst.imm; //updates the program counter to target address
 // }
 
-// void OR()
-// {
-//         registers[instructions[i].rd] = registers[instructions[i].rs] | registers[instructions[i].rt];
-//         i++;
-// }
-
-// void ORI ()
-// {
-//         registers[instructions[i].rd] = registers[instructions[i].rs] | instructions[i].imm;
-//         i++;
-// }
-
-// void sll()
-// {
-//     registers[instructions[i].rd] = registers[instructions[i].rs] * (2* registers[instructions[i].rt]);
-//     i++;
-// }
-
-// void slli()
-// {
-//     registers[instructions[i].rd] = registers[instructions[i].rs] * (2* instructions[i].imm);
-//     i++;
-// }
-// void xor()
-// {
-//     registers[instructions[i].rd] = registers[instructions[i].rs] ^ registers[instructions[i].rt];
-//     i++;
-// }
-// void xori()
-// {
-//     registers[instructions[i].rd] = registers[instructions[i].rs] ^ instructions[i].imm;
-//     i++;
-// }
-// void sll()
-// {
-//     registers[instructions[i].rd] = registers[instructions[i].rs] * (2 * registers[instructions[i].rt]);
-//     i++;
-// }
-
-// void slli()
-// {
-//     registers[instructions[i].rd] = registers[instructions[i].rs] * (2 * instructions[i].imm);
-//     i++;
-// }
-// void sra()
-// {
-//     registers[instructions[i].rd] = registers[instructions[i].rs] >> registers[instructions[i].rt];
-//     i++;
-// }
-// void srai()
-// {
-//     registers[instructions[i].rd] = registers[instructions[i].rs] >> instructions[i].imm;
-//     i++;
-// }
 // void jal()
 // {
 //     executeJAL(instructions[i], i, registers);
 //     i++;
 // }
-
-
-
-
-
 // void SRL() {
 //     int shift_value =registers[instructions[i].rs2]; 
 //     if (shift_value >=32){

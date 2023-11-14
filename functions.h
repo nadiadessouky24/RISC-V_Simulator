@@ -17,23 +17,20 @@ void add ();
 
 void addi();
 
-// void Sub();
+void sub();
 
-// void OR();
+void orfunc();
+void ori();
 
-// void ORI ();
+void sll();
+void slli();
 
-// void sll();
+void xorfunc();
+void xori();
 
-// void slli();
+void sra();
+void srai();
 
-// void xor();
-// void xori();
-// void sll();
-
-// void slli();
-// void sra();
-// void srai();
 // void jal();
 
 // void AND() ;
