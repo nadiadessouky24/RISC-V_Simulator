@@ -17,22 +17,19 @@ int main()
     {
         if (i == instructions.size())
         {
-            cout<<"gootpi";
+            cout<<"End of all instructions";
             break;
         }
         Instructions inst = instructions[i];
 
-        // inst_map[inst.op]
-
-        if( inst_map.find(inst.op) ==inst_map.end() ) // didn't find the key
+        if( inst_map.find(inst.op) == inst_map.end() ) // didn't find the key
         {
             break;
         }
 
         (*inst_map[inst.op])(); //call the function
 
-
-        // BNE, BNEQ, LUI, AUIPC, LB, LBU,SW
+        // BNE, BNEQ, LUI, AUIPC
         int pc = i*4;
         print();
 

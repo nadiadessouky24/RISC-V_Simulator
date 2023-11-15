@@ -8,7 +8,8 @@ public:
     string op;
     int rd, rs, rt, imm;
 
-    Instructions(){
+    Instructions()
+    {
         rd = 0;
         rs = 0;
         rt = 0;

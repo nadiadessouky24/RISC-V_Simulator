@@ -20,33 +20,54 @@ void addi();
 void sub();
 
 void orfunc();
+
 void ori();
 
 void sll();
+
 void slli();
 
 void xorfunc();
+
 void xori();
 
 void sra();
+
 void srai();
+
+void srl() ;
+
+void srli();
+
+void sb();
+
+void sh();
+
+void and();
+
+void andi();
+
+void lb();
+
+void sw();
+
+void lbu();
+
+void slt();
+
+void slti();
+
+void sltu();
+
+
 
 // void jal();
 
-// void AND() ;
 
-// void ANDI();
-
-// void SRL() ;
-
-// void SRLI();
 // void BLTU() ;
 
 // void BGEU() ;
 
-// void SB() ;
-
-// void SH() ;
 
 // void SLT() ;
 
@@ -55,3 +76,4 @@ void srai();
 // void SLTI() ;
 
 // void SLTIU();
+

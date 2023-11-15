@@ -24,5 +24,16 @@ void initialize_map()
     inst_map.emplace("xori", &xori); //9
     inst_map.emplace("sra", &sra); //10
     inst_map.emplace("srai", &srai); //11
-
+    inst_map.emplace("srl", &srl); //12
+    inst_map.emplace("srli", &srli); //13
+    inst_map.emplace("sb", &sb); //14
+    inst_map.emplace("sh", &sh); //15
+    inst_map.emplace("and", &and); //16
+    inst_map.emplace("andi", &andi); //17
+    inst_map.emplace("lb", &lb); //18
+    inst_map.emplace("sw", &sw); //19
+    inst_map.emplace("slt", &slt); //20
+    inst_map.emplace("slti", &slti); //21
+    inst_map.emplace("sltu", &sltu); //22
+    inst_map.emplace("lbu", &lbu); //23
 }
