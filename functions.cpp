@@ -127,12 +127,92 @@ void srai()
     i++;
 }
 
-// void executeJAL(Instructions& inst, int& pc, int* registers) 
-// {   
-//         registers[inst.rd] = pc; //saves return address (counter i) in rd
-//         pc += inst.imm; //updates the program counter to target address
-// }
+void jal(const Instructions& inst, int& pc, int* registers) 
+{   
+        registers[inst.rd] = pc; //saves return address (counter i) in rd
+        pc += inst.imm; //updates the program counter to target address
+}
 
+void blt(const Instructions &inst, int &targetAddress) //Branch if less than 
+{
+        int rs1Value = registers[inst.rs];
+        int rs2Value = registers[inst.rt];
+
+        if (rs1Value < rs2Value) 
+        {
+            targetAddress = inst.imm + registers[31];
+            i++;  // Simulating PC + offset
+        } 
+        else 
+        {
+            targetAddress = 0; // No branch, return original address
+        }
+}
+
+void bge(const Instructions &inst, int &targetAddress)// Branch if greater than 
+{
+    int rs1Value = registers[inst.rs];
+    int rs2Value = registers[inst.rt];
+
+        if (rs1Value >= rs2Value) 
+        {
+            targetAddress = inst.imm + registers[31]; // Simulating PC + offset
+            i++; 
+        } 
+        else 
+        {
+            targetAddress = 0; 
+        }
+}
+
+void lh(const Instructions &inst) //Load halfword 
+{
+    int baseAddress = registers[inst.rs];
+    int offset = inst.imm;
+    int effectiveAddress = baseAddress + offset;
+
+            // Check if the effective address is aligned to a 32-bit boundary
+    if (effectiveAddress % 4 == 0) 
+        {
+            int loadedValue = memory[effectiveAddress / 4];
+            registers[inst.rd] = static_cast<int16_t>(loadedValue & 0xFFFF);
+        } 
+        else 
+        {
+            exit(1);
+        }
+}
+
+void lhu(const Instructions &inst) // Load halfword unsigned 
+{
+        int baseAddress = registers[inst.rs];
+        int offset = inst.imm;
+        int effectiveAddress = baseAddress + offset;
+
+        // Check if the effective address is aligned to a 32-bit boundary
+        if (effectiveAddress % 4 == 0) {
+            int loadedValue = memory[effectiveAddress / 4];
+            registers[inst.rd] = loadedValue & 0xFFFF;
+        } 
+        else 
+        {
+            exit(1); 
+        }
+}
+
+void lw(const Instructions &inst)
+{
+    int baseAddress = registers[inst.rs];
+    if (baseAddress % 4 == 0) 
+        {
+            // Load the 32-bit value from memory into the destination register
+            registers[inst.rd] = memory[baseAddress / 4];
+        } 
+        else 
+        {
+            exit(1);
+        }
+}
 // void jal()
 // {
 //     executeJAL(instructions[i], i, registers);
