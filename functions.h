@@ -31,12 +31,12 @@ void xori();
 void sra();
 void srai();
 
- //void jal();
- void blt(const Instructions &inst, int &targetAddress); 
- void bge(const Instructions &inst, int &targetAddress);
- void lh(const Instructions &inst);
- void lhu(const Instructions &inst);
-void lw(const Instructions &inst); 
+ void jal();
+ void blt(); 
+ void bge();
+ void lh();
+ void lhu();
+void lw(); 
 
 
 //void jalr();

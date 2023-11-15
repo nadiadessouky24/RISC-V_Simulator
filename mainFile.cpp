@@ -1,11 +1,11 @@
 #include "functions.h"
 #include "instructionClass.h"
 #include "global.h"
+#include "memory.h"
 #include <iostream>
 #include <vector>
 #include <map>
 using namespace std;
-
 
 
 int main()
@@ -33,7 +33,9 @@ int main()
 
 
         // BNE, BNEQ, LUI, AUIPC, LB, LBU,SW
-        int pc = i*4;
+        //BLT, BGT, LW ? i think ~nour
+        
+        int pc = i*4; //program counter 
         print();
 
     };

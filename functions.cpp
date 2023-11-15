@@ -127,45 +127,57 @@ void srai()
     i++;
 }
 
-void jal(const Instructions& inst, int& pc, int* registers) 
+void executeJAL(const Instructions& inst, int& pc, int* registers) 
 {   
         registers[inst.rd] = pc; //saves return address (counter i) in rd
         pc += inst.imm; //updates the program counter to target address
 }
-
-void blt(const Instructions &inst, int &targetAddress) //Branch if less than 
+void jal()
 {
-        int rs1Value = registers[inst.rs];
-        int rs2Value = registers[inst.rt];
+    executeJAL(instructions[i], i, registers); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    i++;
+}
+void executeBLT(const Instructions &inst, int &pc) //Branch if less than 
+{
+     
+        if (registers[inst.rs] < registers[inst.rd]) {
+            // Branch is taken, update the program counter
+           // pc += inst.imm;
+           i+=inst.imm; 
+        } else {
+            // Branch not taken, continue to the next instruction
+            pc += 4; // Assuming each instruction is 4 bytes
+            
+        }
+}
+void blt()
+{
+    executeBLT(instructions[i], i); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    i++;
 
-        if (rs1Value < rs2Value) 
+}
+
+void executeBGE(const Instructions &inst)// Branch if greater than 
+{
+    if (registers[inst.rs] >= registers[inst.rd]) {
+            // Branch is taken, update the program counter
+            i += inst.imm;
+        } else 
         {
-            targetAddress = inst.imm + registers[31];
-            i++;  // Simulating PC + offset
-        } 
-        else 
-        {
-            targetAddress = 0; // No branch, return original address
+            // Branch not taken, continue to the next instruction
+            //pc += 4; // Assuming each instruction is 4 bytes
+            i+=4; 
         }
 }
 
-void bge(const Instructions &inst, int &targetAddress)// Branch if greater than 
+void bge()
 {
-    int rs1Value = registers[inst.rs];
-    int rs2Value = registers[inst.rt];
+    executeBGE(instructions[i]); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    i++; 
 
-        if (rs1Value >= rs2Value) 
-        {
-            targetAddress = inst.imm + registers[31]; // Simulating PC + offset
-            i++; 
-        } 
-        else 
-        {
-            targetAddress = 0; 
-        }
 }
 
-void lh(const Instructions &inst) //Load halfword 
+void executeLH(const Instructions &inst) //Load halfword 
 {
     int baseAddress = registers[inst.rs];
     int offset = inst.imm;
@@ -183,7 +195,13 @@ void lh(const Instructions &inst) //Load halfword
         }
 }
 
-void lhu(const Instructions &inst) // Load halfword unsigned 
+void lh()
+{
+    executeLH(instructions[i]);
+    i++; 
+}
+
+void executeLHU(const Instructions &inst) // Load halfword unsigned 
 {
         int baseAddress = registers[inst.rs];
         int offset = inst.imm;
@@ -199,8 +217,12 @@ void lhu(const Instructions &inst) // Load halfword unsigned
             exit(1); 
         }
 }
-
-void lw(const Instructions &inst)
+void lhu()
+{
+    executeLHU(instructions[i]);
+    i++; 
+}
+void executeLW(const Instructions &inst)
 {
     int baseAddress = registers[inst.rs];
     if (baseAddress % 4 == 0) 
@@ -213,11 +235,13 @@ void lw(const Instructions &inst)
             exit(1);
         }
 }
-// void jal()
-// {
-//     executeJAL(instructions[i], i, registers);
-//     i++;
-// }
+
+void lw()
+{
+    executeLW(instructions[i]);
+    i++; 
+}
+
 // void SRL() {
 //     int shift_value =registers[instructions[i].rs2]; 
 //     if (shift_value >=32){
@@ -284,4 +308,4 @@ void lw(const Instructions &inst)
 //     }else{
 //         registers[instructions[i].[rd]] = 0;
 //     }
-//}
+// }
