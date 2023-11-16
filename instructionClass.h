@@ -5,8 +5,8 @@ using namespace std;
 class Instructions 
 {
 public:
-    string op;
-    int rd, rs, rt, imm;
+    string op,label;
+    int rd, rs, rt, imm,j;
 
     Instructions()
     {
@@ -14,6 +14,7 @@ public:
         rs = 0;
         rt = 0;
         imm = 0;
+        j = 0;
     }
 };
 

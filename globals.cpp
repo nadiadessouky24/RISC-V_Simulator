@@ -3,15 +3,13 @@
 #include "functions.h"
 
 
-//momken nkhaly dol in a class? 
 int i=0;
 int registers[32]={0};
 int memory[32]= {0};
-int targetAddress; //not sure
 
 
 map<string, inst_func_ptr> inst_map; 
-
+map<string,int> labels;
 
 void initialize_map()
 {
@@ -38,7 +36,7 @@ void initialize_map()
     inst_map.emplace("slti", &slti); //21
     inst_map.emplace("sltu", &sltu); //22
     inst_map.emplace("lbu", &lbu); //23
-    // inst_map.emplace("lw", &lw);//24
+    inst_map.emplace("lw", &lw);//24
 
     
     // inst_map.emplace("jal", &jal);//24
@@ -48,3 +46,8 @@ void initialize_map()
     // inst_map.emplace("lhu", &lhu);//28
     // inst_map.emplace("lw", &lw);//29
 }
+
+// void initialize_labelmap()
+// {
+//     labels.emplace(inst.label, inst.j);
+// }

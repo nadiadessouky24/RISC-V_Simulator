@@ -59,6 +59,7 @@ void slti();
 
 void sltu();
 
+void lw();
 
 
 

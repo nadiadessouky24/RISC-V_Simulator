@@ -25,6 +25,7 @@ void readFile(string FileName)
         {
             sscanf(line, "%s x%d, x%d, x%d", op, &inst.rd, &inst.rs, &inst.rt);
         } 
+    
         else if (inst.op == "addi" || inst.op == "andi" || inst.op == "slti" || inst.op == "lb" || inst.op == "lbu")  //check format of lb and lbu
         {
             sscanf(line, "%s x%d, x%d, %d", op, &inst.rd, &inst.rs, &inst.imm);
@@ -59,9 +60,11 @@ void readFile(string FileName)
         {
             sscanf(line, "%s", inst.op);
         }
-        else {
-            cout << "Error: Unknown instruction: " << inst.op << endl;
-            exit(1);
+        else
+        {
+            inst.label = inst.op;    
+            inst.j = i+1;
+            labels[inst.label] = inst.j;
         }
         instructions.push_back(inst);
     
@@ -81,6 +84,14 @@ for (int i=0;i<32;i++)
         cout<<" x"<<i<<" :"<<registers[i]<<endl;
 }
 cout<<"----------------------------------------\n";
+cout<<"Memory File: \n";
+for (int i=0;i<32;i++)
+{
+    if (i<10)
+        cout<<" x"<<i<<"  :"<<memory[i]<<endl;
+    else
+        cout<<" x"<<i<<" :"<<memory[i]<<endl;
+}
 
 }
 
@@ -162,11 +173,13 @@ void srli()
 void sb()
  {
     memory[registers[instructions[i].rs]] =(memory[instructions[i].imm]& 0xFFFFFF00) | registers[instructions[i].rt]; 
+    i++;
 }
 
 void sh() 
 {
     memory[registers[instructions[i].rs]] =(memory[instructions[i].imm]& 0xFFFF0000) | registers[instructions[i].rt]; 
+    i++;
 }
 
 void andfunc()
@@ -184,26 +197,39 @@ void andi()
 void lb()
 {
     registers[instructions[i].rt] = (memory[registers[instructions[i].rs] + instructions[i].imm] & 0xFF);
+    i++;
 }
 
-void sw() 
+void sw() //there is an error here see it 
 {
-    memory[registers[instructions[i].rs]] = (memory[instructions[i].imm] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
+    int effectiveAddress = registers[instructions[i].rs] + (instructions[i].imm) % 4;
+
+    // Store the word from the source register to the calculated memory address
+    memory[effectiveAddress] = (memory[effectiveAddress] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
+
+    // Increment the instruction index
+    i++;
 }
 
 
-// void lw()
-// {
-//     // Assuming memory, registers, and instructions are global arrays/structures
-//     // and i is a global variable indicating the current instruction index
+void lw()
+{
+    // Assuming memory, registers, and instructions are global arrays/structures
+    // and i is a global variable indicating the current instruction index
 
-//     // Calculate the effective address for the load word operation
-//     int effectiveAddress = registers[instructions[i].rs] + instructions[i].imm;
+    // Calculate the effective address for the load word operation
+    int effectiveAddress = registers[instructions[i].rs] + instructions[i].imm;
 
-//     // Load the word from memory to the destination register
-//     registers[instructions[i].rt] = memory[effectiveAddress];
-// }
+    // Load the word from memory to the destination register
+    registers[instructions[i].rt] = memory[effectiveAddress];
+    i++;
+}
 
+
+void jal()
+{
+    
+}
 
 
 //double check
@@ -263,16 +289,7 @@ void lbu()
 }
 
 
-// void executeJAL(const Instructions& inst, int& pc, int* registers) 
-// {   
-//         registers[inst.rd] = pc; //saves return address (counter i) in rd
-//         pc += inst.imm; //updates the program counter to target address
-// }
-// void jal()
-// {
-//     executeJAL(instructions[i], i, registers); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//     i++;
-// }
+
 // void executeBLT(const Instructions &inst, int &pc) //Branch if less than 
 // {
      
@@ -407,18 +424,7 @@ void lbu()
 //     executeJAL(instructions[i], i, registers);
 //     i++;
 // }
-// void SRL() {
-//     int shift_value =registers[instructions[i].rs2]; 
-//     if (shift_value >=32){
-//         shift_value  &=0x1F; 
-//     }
 
-//     registers[instructions[i].rd] = registers[instructions[i].rs1] >> shift_value; 
-// }
-
-// void SRLI() {
-//     registers[instructions[i].rd] = registers[instructions[i].rs1] >> shamt;
-// }
 
 // void BLTU() {
 //     if (static_cast<uint32_t>(registers[instructions[i].rs1]) < static_cast<uint32_t>(registers[instructions[i].rs2]))
@@ -433,11 +439,4 @@ void lbu()
 //     }
 // }
 
-// void SB() {
-//     memory[address] =(memory[address]& 0xFFFFFF00) | registers[instructions[i].rs2]; 
-// }
-
-// void SH() {
-//     memory[address] =(memory[address]& 0xFFFF0000) | registers[instructions[i].rs2]; 
-// }
 
