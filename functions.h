@@ -58,10 +58,25 @@ void slt();
 void slti();
 
 void sltu();
+ void jal();
+ void blt(); 
+ void bge();
+ void lh();
+ void lhu();
+void lw(); 
 
 
 
-// void jal();
+ void jal();
+ void blt(); 
+ void bge();
+ void lh();
+ void lhu();
+void lw(); 
+
+
+//void jalr();
+
 
 
 // void BLTU() ;
