@@ -21,45 +21,55 @@ void readFile(string FileName)
      {
         sscanf(line, "%s", op);
         inst.op = op;
-        if (inst.op == "add" || inst.op == "sub" || inst.op == "and" || inst.op == "slt" || inst.op == "sltu") 
+        if (inst.op == "add" || inst.op == "sub" || inst.op == "and" || inst.op == "slt" || inst.op == "sltu" || inst.op == "slli" || inst.op == "srli" || inst.op == "srai" || inst.op == "sll" || inst.op == "xor" || inst.op == "srl"|| inst.op == "sra"|| inst.op == "or")  //R-type 
         {
+            //R-type
             sscanf(line, "%s x%d, x%d, x%d", op, &inst.rd, &inst.rs, &inst.rt);
         } 
     
-        else if (inst.op == "addi" || inst.op == "andi" || inst.op == "slti" || inst.op == "lb" || inst.op == "lbu")  //check format of lb and lbu
+        else if (inst.op == "addi" || inst.op == "andi" || inst.op == "slti" || inst.op == "lb" || inst.op == "lbu"|| inst.op == "xori"|| inst.op == "ori"|| inst.op == "sltiu"|| inst.op == "lh"|| inst.op == "lw"|| inst.op == "lhu"|| inst.op == "jalr") //I-type 
         {
+            //I-type
             sscanf(line, "%s x%d, x%d, %d", op, &inst.rd, &inst.rs, &inst.imm);
         } 
-        else if (inst.op == "beq") 
+        else if (inst.op == "beq"|| inst.op == "bne"|| inst.op == "blt"|| inst.op == "bge"|| inst.op == "bltu"|| inst.op == "bgeu") //B-type
         {
+            //B-type
             sscanf(line, "%s x%d, x%d, %d", op, &inst.rs, &inst.rt, &inst.imm);
         } 
-        else if (inst.op == "j")
-        {
-            sscanf(line, "%s %d", op, &inst.imm);
-        }
+        // else if (inst.op == "j")
+        // {
+        //     sscanf(line, "%s %d", op, &inst.imm);
+        // }
 
-         else if (inst.op == "lw" || inst.op == "sw" || inst.op == "sb" || inst.op == "sh") 
+         else if (inst.op == "sw" || inst.op == "sb" || inst.op == "sh") //S-type //lw is not s-type i removed it ~nour
         {
+            //S-type
             sscanf(line, "%s x%d, %d(x%d)", op, &inst.rt, &inst.imm, &inst.rs);
         } 
 
-        else if (inst.op == "jr") 
+        // else if (inst.op == "jr") 
+        // {
+        //     sscanf(line, "%s x%d", op, &inst.rs);
+        // } 
+        else if (inst.op == "jal")//J-type
         {
-            sscanf(line, "%s x%d", op, &inst.rs);
-        } 
-        else if (inst.op == "jal")
-        {
+            //J-type
             sscanf(line, "%s %d", op, &inst.imm);
         } 
-        else if (inst.op == "halt")
-         {
-            sscanf(line, "%s", inst.op);
-        }
-        else if (inst.op == "nop")
+        else if(inst.op == "lui"|| inst.op == "auipc") 
         {
-            sscanf(line, "%s", inst.op);
+            //U-type
+            sscanf(line, "%s %d", op, &inst.rd, &inst.imm);
         }
+        // else if (inst.op == "halt")
+        //  {
+        //     sscanf(line, "%s", inst.op);
+        // }
+        // else if (inst.op == "nop")
+        // {
+        //     sscanf(line, "%s", inst.op);
+        // }
         else
         {
             inst.label = inst.op;    
@@ -226,12 +236,6 @@ void lw()
 }
 
 
-void jal()
-{
-    
-}
-
-
 //double check
 void slt() 
 {
@@ -289,122 +293,104 @@ void lbu()
 }
 
 
-
-// void executeBLT(const Instructions &inst, int &pc) //Branch if less than 
-// {
+void executeBLT(const Instructions &inst, int &pc) //Branch if less than 
+{
      
-//         if (registers[inst.rs] < registers[inst.rd]) {
-//             // Branch is taken, update the program counter
-//            // pc += inst.imm;
-//            i+=inst.imm; 
-//         } else {
-//             // Branch not taken, continue to the next instruction
-//             pc += 4; // Assuming each instruction is 4 bytes
+        if (registers[inst.rs] < registers[inst.rd]) {
+            // Branch is taken, update the program counter
+           // pc += inst.imm;
+           i+=inst.imm; 
+        } else {
+            // Branch not taken, continue to the next instruction
+            pc += 4; // Assuming each instruction is 4 bytes
             
-//         }
-// }
-// void blt()
-// {
-//     executeBLT(instructions[i], i); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//     i++;
+        }
+}
+void blt()
+{
+    executeBLT(instructions[i], i); 
+    i++;
 
-// }
+}
 
-// void executeBGE(const Instructions &inst)// Branch if greater than 
-// {
-//     if (registers[inst.rs] >= registers[inst.rd])
-//      {
-//             // Branch is taken, update the program counter
-//             i += inst.imm;
-//         } 
-//         else 
-//         {
-//             // Branch not taken, continue to the next instruction
-//             //pc += 4; // Assuming each instruction is 4 bytes
-//             i+=4; 
-//         }
-// }
+void executeBGE(const Instructions &inst)// Branch if greater than 
+{
+    if (registers[inst.rs] >= registers[inst.rd])
+     {
+            // Branch is taken, update the program counter
+            i += inst.imm;
+        } 
+        else 
+        {
+            // Branch not taken, continue to the next instruction
+            //pc += 4; // Assuming each instruction is 4 bytes
+            i+=4; 
+        }
+}
 
-// void bge()
-// {
-//     executeBGE(instructions[i]); 
-//     i++; 
+void bge()
+{
+    executeBGE(instructions[i]); 
+    i++; 
 
-// }
+}
 
-// void executeLH(const Instructions &inst) //Load halfword 
-// {
-//     int baseAddress = registers[inst.rs];
-//     int offset = inst.imm;
-//     int effectiveAddress = baseAddress + offset;
+void executeLH(const Instructions &inst) //Load halfword 
+{
+    int baseAddress = registers[inst.rs];
+    int offset = inst.imm;
+    int effectiveAddress = baseAddress + offset;
 
-//             // Check if the effective address is aligned to a 32-bit boundary
-//     if (effectiveAddress % 4 == 0) 
-//         {
-//             int loadedValue = memory[effectiveAddress / 4];
-//             registers[inst.rd] = static_cast<int16_t>(loadedValue & 0xFFFF);
-//         } 
-//         else 
-//         {
-//             exit(1);
-//         }
-// }
+            // Check if the effective address is aligned to a 32-bit boundary
+    if (effectiveAddress % 4 == 0) 
+        {
+            int loadedValue = memory[effectiveAddress / 4];
+            registers[inst.rd] = static_cast<int16_t>(loadedValue & 0xFFFF);
+        } 
+        else 
+        {
+            exit(1);
+        }
+}
 
-// void lh()
-// {
-//     executeLH(instructions[i]);
-//     i++; 
-// }
+void lh()
+{
+    executeLH(instructions[i]);
+    i++; 
+}
 
-// void executeLHU(const Instructions &inst) // Load halfword unsigned 
-// {
-//         int baseAddress = registers[inst.rs];
-//         int offset = inst.imm;
-//         int effectiveAddress = baseAddress + offset;
+void executeLHU(const Instructions &inst) // Load halfword unsigned 
+{
+        int baseAddress = registers[inst.rs];
+        int offset = inst.imm;
+        int effectiveAddress = baseAddress + offset;
 
-//         // Check if the effective address is aligned to a 32-bit boundary
-//         if (effectiveAddress % 4 == 0) {
-//             int loadedValue = memory[effectiveAddress / 4];
-//             registers[inst.rd] = loadedValue & 0xFFFF;
-//         } 
-//         else 
-//         {
-//             exit(1); 
-//         }
-// }
-// void lhu()
-// {
-//     executeLHU(instructions[i]);
-//     i++; 
-// }
-// void executeLW(const Instructions &inst)
-// {
-//     int baseAddress = registers[inst.rs];
-//     if (baseAddress % 4 == 0) 
-//         {
-//             // Load the 32-bit value from memory into the destination register
-//             registers[inst.rd] = memory[baseAddress / 4];
-//         } 
-//         else 
-//         {
-//             exit(1);
-//         }
-// }
+        // Check if the effective address is aligned to a 32-bit boundary
+        if (effectiveAddress % 4 == 0) {
+            int loadedValue = memory[effectiveAddress / 4];
+            registers[inst.rd] = loadedValue & 0xFFFF;
+        } 
+        else 
+        {
+            exit(1); 
+        }
+}
+void lhu()
+{
+    executeLHU(instructions[i]);
+    i++; 
+}
 
-// void lw()
-// {
-//     executeLW(instructions[i]);
-//     i++; 
-// }
 
-// void BGEU() {
+// void bgeu() GHALAT
+//{
 //     if ( static_cast<uint32_t>(registers[instructions[i].rs1]) >= static_cast<uint32_t>(registers[instructions[i].rs2])){
 //         pointer_address += imm;
 //     }
 // }
 
 
-// void BLTU() 
+// void bltu() GHALAT
 // {
 //     if (static_cast<uint32_t>(registers[instructions[i].rs1]) < static_cast<uint32_t>(registers[instructions[i].rs2]))
 //     {
@@ -413,30 +399,45 @@ void lbu()
 // }
 
 
-// void executeJAL(Instructions& inst, int& pc, int* registers) 
-// {   
-//         registers[inst.rd] = pc; //saves return address (counter i) in rd
-//         pc += inst.imm; //updates the program counter to target address
-// }
+void executeJAL(Instructions& inst, int& pc, int* registers) 
+{   
+        registers[inst.rd] = pc; //saves return address (counter i) in rd
+        pc += inst.imm; //updates the program counter to target address
+}
 
-// void jal()
-// {
-//     executeJAL(instructions[i], i, registers);
-//     i++;
-// }
+void jal()
+{
+    executeJAL(instructions[i], i, registers);
+    i++;
+}
 
+void jalr()
+{
+    //still needed 
+}
 
-// void BLTU() {
-//     if (static_cast<uint32_t>(registers[instructions[i].rs1]) < static_cast<uint32_t>(registers[instructions[i].rs2]))
-//     {
-//         pointer_address += imm;
-//     }
-// }
+void lui() //load upper immediate
+{
+    registers[instructions[i].rd] = instructions[i].imm << 12;
+    i++;
+    //imm is 20-bits, 
+    //load constants or addresses into a register when the lower 12 bits are known to be zero.
+}
 
-// void BGEU() {
-//     if ( static_cast<uint32_t>(registers[instructions[i].rs1]) >= static_cast<uint32_t>(registers[instructions[i].rs2])){
-//         pointer_address += imm;
-//     }
-// }
+void auipc() //add upper immediate to program counter
+{
+    //registers[instructions[i].rd] = pc + (instructions[i].imm << 12);
+    registers[instructions[i].rd] = i*4 + (instructions[i].imm << 12);
+    i++;
+    // similar to lui, but it adds the immediate value shifted left by 12 bits to the current value of the program counter
+}
 
+void beq()
+{
+    //still needed
+}
 
+void bne()
+{
+    //still needed
+}

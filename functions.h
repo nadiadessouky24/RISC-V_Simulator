@@ -13,78 +13,45 @@ void executeJAL(Instructions& inst, int& pc, int* registers);
 
 void print();
 
-void add();
 
-void addi();
-
-void sub();
-
-void orfunc();
-
-void ori();
-
-void sll();
-
-void slli();
-
-void xorfunc();
-
-void xori();
-
-void sra();
-
-void srai();
-
-void srl() ;
-
-void srli();
-
-void sb();
-
-void sh();
-
-void andfunc();
-
-void andi();
-
-void lb();
-
-void sw();
-
-void lbu();
-
-void slt();
-
-void slti();
-
-void sltu();
-
-void lw();
+void lui();//1
+void auipc();//2
+void jal();//3
+void jalr();//4
+void beq();//5
+void bne();//6
+void blt();//7
+void bge();//8
+void bltu();//9
+void bgeu();//10
+void lb();//11
+void lh();//12
+void lw();//13
+void lbu();//14
+void lhu();//15
+void sb();//16
+void sh();//17
+void sw();//18
+void addi();//19
+void slti();//20
+void sltiu();//21
+void xori();//22
+void ori();//23
+void andi();//24
+void slli();//25
+void srli();//26
+void srai();//27
+void add();//28
+void sub();//29
+void sll();//30
+void slt();//31
+void sltu();//32
+void xorfunc();//33
+void srl();//34
+void sra();//35
+void orfunc();//36
+void andfunc();//37
 
 
 
-//  void jal();
-//  void blt(); 
-//  void bge();
-//  void lh();
-//  void lhu();
-// void lw(); 
-
-
-//void jalr();
-
-
-
-// void BLTU() ;
-
-// void BGEU() ;
-
-
-// void SLT() ;
-
-// void SLTU() ;
-
-// void SLTI() ;
-
-// void SLTIU();
 

@@ -38,13 +38,21 @@ void initialize_map()
     inst_map.emplace("lbu", &lbu); //23
     inst_map.emplace("lw", &lw);//24
 
+    inst_map.emplace("jal", &jal);//25
+    inst_map.emplace("blt", &blt);//26
+    inst_map.emplace("bge", &bge);//27
+    inst_map.emplace("lh", &lh);//28
+    inst_map.emplace("lhu", &lhu);//29
+
+    inst_map.emplace("lui", &lui);//30
+    inst_map.emplace("auipc", &auipc);//31
+    inst_map.emplace("jalr",&jalr);//32
+    inst_map.emplace("beq",&beq);//33
+    inst_map.emplace("bne",&bne);//34
+    inst_map.emplace("bltu",&bltu);//35
+    inst_map.emplace("bgeu",&bgeu);//36
+    inst_map.emplace("sltiu",&sltiu);//37
     
-    // inst_map.emplace("jal", &jal);//24
-    // inst_map.emplace("blt", &blt);//25
-    // inst_map.emplace("bge", &bge);//26
-    // inst_map.emplace("lh", &lh);//27
-    // inst_map.emplace("lhu", &lhu);//28
-    // inst_map.emplace("lw", &lw);//29
 }
 
 // void initialize_labelmap()

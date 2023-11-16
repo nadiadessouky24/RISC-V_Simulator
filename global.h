@@ -20,5 +20,5 @@ extern vector<Instructions> instructions;
 typedef void(*inst_func_ptr)(void);
 extern map<string, inst_func_ptr> inst_map; 
 void initialize_map();
-extern map<string,int> label;
+extern map<string,int> labels;
 
