@@ -13,7 +13,7 @@ void executeJAL(Instructions& inst, int& pc, int* registers);
 
 void print();
 
-void add ();
+void add();
 
 void addi();
 
@@ -43,7 +43,7 @@ void sb();
 
 void sh();
 
-void and();
+void andfunc();
 
 void andi();
 
@@ -58,21 +58,16 @@ void slt();
 void slti();
 
 void sltu();
- void jal();
- void blt(); 
- void bge();
- void lh();
- void lhu();
-void lw(); 
 
 
 
- void jal();
- void blt(); 
- void bge();
- void lh();
- void lhu();
-void lw(); 
+
+//  void jal();
+//  void blt(); 
+//  void bge();
+//  void lh();
+//  void lhu();
+// void lw(); 
 
 
 //void jalr();

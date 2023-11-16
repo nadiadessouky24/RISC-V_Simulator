@@ -20,6 +20,7 @@ int main()
             cout<<"End of all instructions";
             break;
         }
+
         Instructions inst = instructions[i];
 
         if( inst_map.find(inst.op) == inst_map.end() ) // didn't find the key
@@ -29,12 +30,11 @@ int main()
 
         (*inst_map[inst.op])(); //call the function
 
-     // BNE, BNEQ, LUI, AUIPC, LB, LBU,SW
+        // BNE, BNEQ, LUI, AUIPC
         //BLT, BGT, LW ? i think ~nour
         
         int pc = i*4; //program counter 
         print();
-
     };
 
     return 0;

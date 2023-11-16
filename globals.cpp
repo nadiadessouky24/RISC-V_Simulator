@@ -26,11 +26,11 @@ void initialize_map()
     inst_map.emplace("xori", &xori); //9
     inst_map.emplace("sra", &sra); //10
     inst_map.emplace("srai", &srai); //11
-   inst_map.emplace("srl", &srl); //12
+    inst_map.emplace("srl", &srl); //12
     inst_map.emplace("srli", &srli); //13
     inst_map.emplace("sb", &sb); //14
     inst_map.emplace("sh", &sh); //15
-    inst_map.emplace("and", &and); //16
+    inst_map.emplace("and", &andfunc); //16
     inst_map.emplace("andi", &andi); //17
     inst_map.emplace("lb", &lb); //18
     inst_map.emplace("sw", &sw); //19
@@ -38,11 +38,13 @@ void initialize_map()
     inst_map.emplace("slti", &slti); //21
     inst_map.emplace("sltu", &sltu); //22
     inst_map.emplace("lbu", &lbu); //23
-     inst_map.emplace("jal", &jal);//12
-    //inst_map.emplace("jalr", &jalr)//13
-    inst_map.emplace("blt", &blt);//14
-    inst_map.emplace("bge", &bge);//15
-    inst_map.emplace("lh", &lh);//16
-    inst_map.emplace("lhu", &lhu);//17
-    inst_map.emplace("lw", &lw);//18
+    // inst_map.emplace("lw", &lw);//24
+
+    
+    // inst_map.emplace("jal", &jal);//24
+    // inst_map.emplace("blt", &blt);//25
+    // inst_map.emplace("bge", &bge);//26
+    // inst_map.emplace("lh", &lh);//27
+    // inst_map.emplace("lhu", &lhu);//28
+    // inst_map.emplace("lw", &lw);//29
 }

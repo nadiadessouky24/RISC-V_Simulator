@@ -1,7 +1,8 @@
-#pragma once
+// #pragma once
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cstdint> // or #include <cinttypes>
 #include "instructionClass.h"
 #include "global.h"
 #include "functions.h"
@@ -168,7 +169,7 @@ void sh()
     memory[registers[instructions[i].rs]] =(memory[instructions[i].imm]& 0xFFFF0000) | registers[instructions[i].rt]; 
 }
 
-void and()
+void andfunc()
 {
     registers[instructions[i].rd] = registers[instructions[i].rs] & registers[instructions[i].rt];
     i++;
@@ -189,6 +190,21 @@ void sw()
 {
     memory[registers[instructions[i].rs]] = (memory[instructions[i].imm] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
 }
+
+
+// void lw()
+// {
+//     // Assuming memory, registers, and instructions are global arrays/structures
+//     // and i is a global variable indicating the current instruction index
+
+//     // Calculate the effective address for the load word operation
+//     int effectiveAddress = registers[instructions[i].rs] + instructions[i].imm;
+
+//     // Load the word from memory to the destination register
+//     registers[instructions[i].rt] = memory[effectiveAddress];
+// }
+
+
 
 //double check
 void slt() 
@@ -219,13 +235,13 @@ void sltu()
 
 void slti() 
 {
-        if(registers[instructions[i].rs] < instructions[i].imm)
-        {
-        registers[instructions[i].[rd]] = 1;
+    if(registers[instructions[i].rs] < instructions[i].imm)
+    {
+    registers[instructions[i].rd] = 1;
     }
     else
     {
-        registers[instructions[i].[rd]] = 0;
+        registers[instructions[i].rd] = 0;
     }
 }
 
@@ -233,11 +249,11 @@ void sltiu()
 {
     if(static_cast<uint32_t>(registers[instructions[i].rs]) < static_cast<uint32_t>(instructions[i].imm))
     {
-        registers[instructions[i].[rd]] = 1;
+        registers[instructions[i].rd] = 1;
     }
     else
     {
-        registers[instructions[i].[rd]] = 0;
+        registers[instructions[i].rd] = 0;
     }
 }
 
@@ -247,7 +263,122 @@ void lbu()
 }
 
 
+// void executeJAL(const Instructions& inst, int& pc, int* registers) 
+// {   
+//         registers[inst.rd] = pc; //saves return address (counter i) in rd
+//         pc += inst.imm; //updates the program counter to target address
+// }
+// void jal()
+// {
+//     executeJAL(instructions[i], i, registers); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//     i++;
+// }
+// void executeBLT(const Instructions &inst, int &pc) //Branch if less than 
+// {
+     
+//         if (registers[inst.rs] < registers[inst.rd]) {
+//             // Branch is taken, update the program counter
+//            // pc += inst.imm;
+//            i+=inst.imm; 
+//         } else {
+//             // Branch not taken, continue to the next instruction
+//             pc += 4; // Assuming each instruction is 4 bytes
+            
+//         }
+// }
+// void blt()
+// {
+//     executeBLT(instructions[i], i); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//     i++;
 
+// }
+
+// void executeBGE(const Instructions &inst)// Branch if greater than 
+// {
+//     if (registers[inst.rs] >= registers[inst.rd])
+//      {
+//             // Branch is taken, update the program counter
+//             i += inst.imm;
+//         } 
+//         else 
+//         {
+//             // Branch not taken, continue to the next instruction
+//             //pc += 4; // Assuming each instruction is 4 bytes
+//             i+=4; 
+//         }
+// }
+
+// void bge()
+// {
+//     executeBGE(instructions[i]); 
+//     i++; 
+
+// }
+
+// void executeLH(const Instructions &inst) //Load halfword 
+// {
+//     int baseAddress = registers[inst.rs];
+//     int offset = inst.imm;
+//     int effectiveAddress = baseAddress + offset;
+
+//             // Check if the effective address is aligned to a 32-bit boundary
+//     if (effectiveAddress % 4 == 0) 
+//         {
+//             int loadedValue = memory[effectiveAddress / 4];
+//             registers[inst.rd] = static_cast<int16_t>(loadedValue & 0xFFFF);
+//         } 
+//         else 
+//         {
+//             exit(1);
+//         }
+// }
+
+// void lh()
+// {
+//     executeLH(instructions[i]);
+//     i++; 
+// }
+
+// void executeLHU(const Instructions &inst) // Load halfword unsigned 
+// {
+//         int baseAddress = registers[inst.rs];
+//         int offset = inst.imm;
+//         int effectiveAddress = baseAddress + offset;
+
+//         // Check if the effective address is aligned to a 32-bit boundary
+//         if (effectiveAddress % 4 == 0) {
+//             int loadedValue = memory[effectiveAddress / 4];
+//             registers[inst.rd] = loadedValue & 0xFFFF;
+//         } 
+//         else 
+//         {
+//             exit(1); 
+//         }
+// }
+// void lhu()
+// {
+//     executeLHU(instructions[i]);
+//     i++; 
+// }
+// void executeLW(const Instructions &inst)
+// {
+//     int baseAddress = registers[inst.rs];
+//     if (baseAddress % 4 == 0) 
+//         {
+//             // Load the 32-bit value from memory into the destination register
+//             registers[inst.rd] = memory[baseAddress / 4];
+//         } 
+//         else 
+//         {
+//             exit(1);
+//         }
+// }
+
+// void lw()
+// {
+//     executeLW(instructions[i]);
+//     i++; 
+// }
 
 // void BGEU() {
 //     if ( static_cast<uint32_t>(registers[instructions[i].rs1]) >= static_cast<uint32_t>(registers[instructions[i].rs2])){
@@ -265,120 +396,7 @@ void lbu()
 // }
 
 
-void executeJAL(const Instructions& inst, int& pc, int* registers) 
-{   
-        registers[inst.rd] = pc; //saves return address (counter i) in rd
-        pc += inst.imm; //updates the program counter to target address
-}
-void jal()
-{
-    executeJAL(instructions[i], i, registers); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    i++;
-}
-void executeBLT(const Instructions &inst, int &pc) //Branch if less than 
-{
-     
-        if (registers[inst.rs] < registers[inst.rd]) {
-            // Branch is taken, update the program counter
-           // pc += inst.imm;
-           i+=inst.imm; 
-        } else {
-            // Branch not taken, continue to the next instruction
-            pc += 4; // Assuming each instruction is 4 bytes
-            
-        }
-}
-void blt()
-{
-    executeBLT(instructions[i], i); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    i++;
-
-}
-
-void executeBGE(const Instructions &inst)// Branch if greater than 
-{
-    if (registers[inst.rs] >= registers[inst.rd]) {
-            // Branch is taken, update the program counter
-            i += inst.imm;
-        } else 
-        {
-            // Branch not taken, continue to the next instruction
-            //pc += 4; // Assuming each instruction is 4 bytes
-            i+=4; 
-        }
-}
-
-void bge()
-{
-    executeBGE(instructions[i]); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    i++; 
-
-}
-
-void executeLH(const Instructions &inst) //Load halfword 
-{
-    int baseAddress = registers[inst.rs];
-    int offset = inst.imm;
-    int effectiveAddress = baseAddress + offset;
-
-            // Check if the effective address is aligned to a 32-bit boundary
-    if (effectiveAddress % 4 == 0) 
-        {
-            int loadedValue = memory[effectiveAddress / 4];
-            registers[inst.rd] = static_cast<int16_t>(loadedValue & 0xFFFF);
-        } 
-        else 
-        {
-            exit(1);
-        }
-}
-
-void lh()
-{
-    executeLH(instructions[i]);
-    i++; 
-}
-
-void executeLHU(const Instructions &inst) // Load halfword unsigned 
-{
-        int baseAddress = registers[inst.rs];
-        int offset = inst.imm;
-        int effectiveAddress = baseAddress + offset;
-
-        // Check if the effective address is aligned to a 32-bit boundary
-        if (effectiveAddress % 4 == 0) {
-            int loadedValue = memory[effectiveAddress / 4];
-            registers[inst.rd] = loadedValue & 0xFFFF;
-        } 
-        else 
-        {
-            exit(1); 
-        }
-}
-void lhu()
-{
-    executeLHU(instructions[i]);
-    i++; 
-}
-void executeLW(const Instructions &inst)
-{
-    int baseAddress = registers[inst.rs];
-    if (baseAddress % 4 == 0) 
-        {
-            // Load the 32-bit value from memory into the destination register
-            registers[inst.rd] = memory[baseAddress / 4];
-        } 
-        else 
-        {
-            exit(1);
-        }
-}
-
-void lw()
-{
-    executeLW(instructions[i]);
-    i++; 
-}// void executeJAL(Instructions& inst, int& pc, int* registers) 
+// void executeJAL(Instructions& inst, int& pc, int* registers) 
 // {   
 //         registers[inst.rd] = pc; //saves return address (counter i) in rd
 //         pc += inst.imm; //updates the program counter to target address
@@ -423,36 +441,3 @@ void lw()
 //     memory[address] =(memory[address]& 0xFFFF0000) | registers[instructions[i].rs2]; 
 // }
 
-// void SLT() {
-//     if(registers[instructions[i].rs1] < registers[instructions[i].rs2]){
-//         registers[instructions[i].rd] = 1;
-//     }else{
-//         registers[instructions[i].rd] = 0;
-//     }
-// }
-
-// void SLTU() {
-    
-//     if(static_cast<uint32_t>(registers[instructions[i].rs1]) < static_cast<uint32_t>(registers[instructions[i].rs2])){
-//         registers[instructions[i].rd] = 1;
-//     }else{
-//         registers[instructions[i].rd] = 0;
-//     }
-
-// }
-
-// void SLTI() {
-//         if(registers[instructions[i].rs1] < imm){
-//         registers[instructions[i].[rd]] = 1;
-//     }else{
-//         registers[instructions[i].[rd]] = 0;
-//     }
-// }
-
-// void SLTIU() {
-//     if(static_cast<uint32_t>(registers[instructions[i].rs1]) < static_cast<uint32_t>(imm)){
-//         registers[instructions[i].[rd]] = 1;
-//     }else{
-//         registers[instructions[i].[rd]] = 0;
-//     }
-//}
