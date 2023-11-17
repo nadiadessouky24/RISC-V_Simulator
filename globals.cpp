@@ -6,7 +6,7 @@
 int i=0;
 int registers[32]={0};
 int memory[32]= {0};
-
+int offset;
 
 map<string, inst_func_ptr> inst_map; 
 map<string,int> labels;
@@ -49,8 +49,8 @@ void initialize_map()
     inst_map.emplace("jalr",&jalr);//32
     inst_map.emplace("beq",&beq);//33
     inst_map.emplace("bne",&bne);//34
-    inst_map.emplace("bltu",&bltu);//35
-    inst_map.emplace("bgeu",&bgeu);//36
+    //inst_map.emplace("bltu",&bltu);//35
+    //inst_map.emplace("bgeu",&bgeu);//36
     inst_map.emplace("sltiu",&sltiu);//37
     
 }

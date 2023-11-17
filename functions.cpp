@@ -109,6 +109,26 @@ void add ()
 {
     registers[instructions[i].rd] = registers[instructions[i].rs] + registers[instructions[i].rt];
     i++;
+
+    // int result = registers[instructions[i].rs] + registers[instructions[i].rt];
+    // registers[instructions[i].rd] = result;
+
+    // // Save the result in memory as well
+    // int baseAddress = registers[inst.rd];
+    // int effectiveAddress = baseAddress + registers[inst.rd];
+    
+    // // Check if the effective address is aligned to a 32-bit boundary
+    // if (effectiveAddress % 4 == 0) {
+    //     // Store the result in memory
+    //     memory[effectiveAddress / 4] = result;
+    // } 
+    // else 
+    // {
+    //     exit(1);
+    // }
+
+    // i++;
+
 }
 
 void addi()
@@ -210,31 +230,61 @@ void lb()
     i++;
 }
 
-void sw() //there is an error here see it 
-{
-    int effectiveAddress = registers[instructions[i].rs] + (instructions[i].imm) % 4;
+// void sw() //there is an error here see it 
+// {
+//     int effectiveAddress = registers[instructions[i].rs] + (instructions[i].imm) % 4;
 
-    // Store the word from the source register to the calculated memory address
-    memory[effectiveAddress] = (memory[effectiveAddress] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
+//     // Store the word from the source register to the calculated memory address
+//     memory[effectiveAddress] = (memory[effectiveAddress] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
 
-    // Increment the instruction index
+//     // Increment the instruction index
+//     i++;
+// }
+
+void sw() //new sw 
+{ //theres something wrong with the offset i dont understand 
+    int baseAddress = registers[instructions[i].rs];
+    int effectiveAddress = baseAddress + instructions[i].imm;
+
+    // Store the value from the source register to memory
+    memory[effectiveAddress] = registers[instructions[i].rt];
+
     i++;
 }
 
 
-void lw()
+// void lw()
+// {
+//     // Assuming memory, registers, and instructions are global arrays/structures
+//     // and i is a global variable indicating the current instruction index
+
+//     // Calculate the effective address for the load word operation
+//     int effectiveAddress = registers[instructions[i].rs] + instructions[i].imm;
+
+//     // Load the word from memory to the destination register
+//     registers[instructions[i].rt] = memory[effectiveAddress];
+//     i++;
+// }
+
+void executeLW(const Instructions &inst) 
 {
-    // Assuming memory, registers, and instructions are global arrays/structures
-    // and i is a global variable indicating the current instruction index
-
-    // Calculate the effective address for the load word operation
-    int effectiveAddress = registers[instructions[i].rs] + instructions[i].imm;
-
-    // Load the word from memory to the destination register
-    registers[instructions[i].rt] = memory[effectiveAddress];
-    i++;
+    int baseAddress = registers[inst.rs];
+    if (baseAddress % 4 == 0) 
+        {
+            // Load the 32-bit value from memory into the destination register
+            registers[inst.rd] = memory[baseAddress / 4];
+        } 
+        else 
+        {
+            exit(1);
+        }
 }
 
+void lw() 
+{
+    executeLW(instructions[i]);
+    i++; 
+}
 
 //double check
 void slt() 
