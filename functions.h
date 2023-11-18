@@ -8,9 +8,6 @@ using namespace std;
 
 void readFile(string FileName);
 
-
-void executeJAL(Instructions& inst, int& pc, int* registers);
-
 void print(); 
 
 //LUI and AUIPC

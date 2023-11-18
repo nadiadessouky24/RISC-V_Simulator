@@ -22,7 +22,7 @@ void readFile(string FileName)
      {
         sscanf(line, "%s", op);
         inst.op = op;
-        if (inst.op == "add" || inst.op == "sub" || inst.op == "and" || inst.op == "slt" || inst.op == "sltu" || inst.op == "slli" || inst.op == "srli" || inst.op == "srai" || inst.op == "sll" || inst.op == "xor" || inst.op == "srl"|| inst.op == "sra"|| inst.op == "or")  //R-type 
+        if (inst.op == "add" || inst.op == "sub" || inst.op == "and" || inst.op == "slt" || inst.op == "sltu" || inst.op == "slli" || inst.op == "srli" || inst.op == "srai" || inst.op == "sll" || inst.op == "xor" || inst.op == "srl"|| inst.op == "sra"|| inst.op == "or" || inst.op == "xor")  //R-type 
         {
             //R-type
             sscanf(line, "%s x%d, x%d, x%d", op, &inst.rd, &inst.rs, &inst.rt);
@@ -38,21 +38,11 @@ void readFile(string FileName)
             //B-type
             sscanf(line, "%s x%d, x%d, %d", op, &inst.rs, &inst.rt, &inst.imm);
         } 
-        // else if (inst.op == "j")
-        // {
-        //     sscanf(line, "%s %d", op, &inst.imm);
-        // }
-
-         else if (inst.op == "sw" || inst.op == "sb" || inst.op == "sh") //S-type //lw is not s-type i removed it ~nour
+         else if (inst.op == "sw" || inst.op == "sb" || inst.op == "sh") //S-type 
         {
             //S-type
             sscanf(line, "%s x%d, %d(x%d)", op, &inst.rt, &inst.imm, &inst.rs);
         } 
-
-        // else if (inst.op == "jr") 
-        // {
-        //     sscanf(line, "%s x%d", op, &inst.rs);
-        // } 
         else if (inst.op == "jal")//J-type
         {
             //J-type
@@ -63,13 +53,9 @@ void readFile(string FileName)
             //U-type
             sscanf(line, "%s %d", op, &inst.rd, &inst.imm);
         }
-        // else if (inst.op == "halt")
-        //  {
-        //     sscanf(line, "%s", inst.op);
-        // }
         else
         {
-            cout<<"error";
+            cout<<"error:unknown instruction";
         }
         instructions.push_back(inst);
     
@@ -98,125 +84,256 @@ cout<<"----------------------------------------\n";
 
 }
 
-void lhu(){
-    //TODO
-}
 
 void add ()
 {
-    registers[instructions[i].rd] = registers[instructions[i].rs] + registers[instructions[i].rt];
-    i++;
+    if (instructions[i].rd == "x0")
+    {
+       registers[instructions[i].rd] = 0;
+    }
+    else 
+    {
+        registers[instructions[i].rd] = registers[instructions[i].rs] + registers[instructions[i].rt];
+        i++;
+    }
+    
 }
 
 void addi()
 {
+    if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+    }
+    else
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] + instructions[i].imm;
     i++;
+    }
 }
 
 void sub()
 {
+    if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] - registers[instructions[i].rt];
     i++;
+    }
 }
 
 void orfunc()
 {
+   if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] | registers[instructions[i].rt];
     i++;
+    }
 }
 
 void ori()
 {
-        registers[instructions[i].rd] = registers[instructions[i].rs] | instructions[i].imm;
-        i++;
+    if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else
+    {
+    registers[instructions[i].rd] = registers[instructions[i].rs] | instructions[i].imm;
+    i++;
+    }
 }
 
 void sll()
 {
+    if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] * (2* registers[instructions[i].rt]);
     i++;
+    }
 }
 
 void slli()
 {
+    if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] * (2* instructions[i].imm);
     i++;
+    }
 }
 void xorfunc()
 {
+    if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] ^ registers[instructions[i].rt];
     i++;
+    }
 }
 void xori()
 {
+    if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] ^ instructions[i].imm;
     i++;
+    }
 }
 void sra()
 {
+  if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] >> registers[instructions[i].rt];
     i++;
+    }
 }
 void srai()
 {
+  if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] >> instructions[i].imm;
     i++;
+    }
 }
 
 void srl()
 {
+  if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] / (2* registers[instructions[i].rt]);
     i++;
+    }
 }
 
 void srli()
 {
+  if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] / (2* instructions[i].rt);
     i++;
+    }
 
 }
 void andfunc()
 {
+  if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] & registers[instructions[i].rt];
     i++;
+    }
 }
 
 void andi()
 {
+    if (instructions[i].rd == "x0")
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     registers[instructions[i].rd] = registers[instructions[i].rs] & instructions[i].rt;
     i++;
+    }
 }
 
 
 ////////////////// SHIFTS/////////////////
 
-//double check
 void slt() 
 {
-    if(registers[instructions[i].rs] < registers[instructions[i].rt])
-    {
-        registers[instructions[i].rd] = 1;
-    }
-    else
+      if (instructions[i].rd == "x0")
     {
         registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
+        if(registers[instructions[i].rs] < registers[instructions[i].rt])
+        {
+            registers[instructions[i].rd] = 1;
+        }
+        else
+        {
+            registers[instructions[i].rd] = 0;
+        }
     }
 }
 
 void sltu()
  {
-    
-    if(static_cast<uint32_t>(registers[instructions[i].rs]) < static_cast<uint32_t>(registers[instructions[i].rt]))
-    {
-        registers[instructions[i].rd] = 1;
-    }
-    else
+    if (instructions[i].rd == "x0")
     {
         registers[instructions[i].rd] = 0;
-    }
 
+    }
+    else 
+    {
+        if(static_cast<uint32_t>(registers[instructions[i].rs]) < static_cast<uint32_t>(registers[instructions[i].rt]))
+        {
+            registers[instructions[i].rd] = 1;
+        }
+        else
+        {
+            registers[instructions[i].rd] = 0;
+        }
+    }
 }
+
+// stopped here 
 
 void slti() 
 {
@@ -309,11 +426,12 @@ void beq()
 
 void bne()
 {
-   
+    if (registers[instructions[i].rd] != registers[instructions[i].rs])
+    {
+        i = i + (instructions[i].imm*2);
+    }
+    i++;
 }
-
-
-
 
 //////////////////// LOAD AND STORE /////////////////////////
 
@@ -323,6 +441,14 @@ void lh()
 
     int loadedValue = (memory[address] << 16) >> 16;  // Sign-extend to 32 bits
 
+    registers[instructions[i].rt] = loadedValue;
+    i++;
+}
+
+void lhu() 
+{
+    int address = registers[instructions[i].rs] + instructions[i].imm;
+    unsigned short loadedValue = memory[address] | (memory[address + 1] << 8);
     registers[instructions[i].rt] = loadedValue;
     i++;
 }
@@ -370,10 +496,6 @@ void sh()
     memory[registers[instructions[i].rs]] =(memory[instructions[i].imm]& 0xFFFF0000) | registers[instructions[i].rt]; 
     i++;
 }
-
-
-
-
 
 
 //////////////////////////////// LUI and AUPIC //////////////////////////////////
