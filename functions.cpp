@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
 #include <cstdint> // or #include <cinttypes>
 #include "instructionClass.h"
 #include "global.h"
@@ -26,7 +27,7 @@ void readFile(string FileName)
             sscanf(line, "%s x%d, x%d, x%d", op, &inst.rd, &inst.rs, &inst.rt);
         } 
     
-        else if (inst.op == "addi" || inst.op == "andi" || inst.op == "slti" || inst.op == "lb" || inst.op == "lbu")  //check format of lb and lbu
+        else if (inst.op == "addi" || inst.op == "andi" || inst.op == "slti" || inst.op == "lb" || inst.op == "lbu" || inst.op == "blt" || inst.op == "bge" || inst.op == "bltu" || inst.op == "bgeu" || inst.op == "jalr")  //check format of lb and lbu
         {
             sscanf(line, "%s x%d, x%d, %d", op, &inst.rd, &inst.rs, &inst.imm);
         } 
@@ -50,10 +51,10 @@ void readFile(string FileName)
         } 
         else if (inst.op == "jal")
         {
-            sscanf(line, "%s %d", op, &inst.imm);
+            sscanf(line, "%s x%d %d", op, &inst.rd, &inst.imm);
         } 
         else if (inst.op == "halt")
-         {
+        {
             sscanf(line, "%s", inst.op);
         }
         else if (inst.op == "nop")
@@ -62,9 +63,7 @@ void readFile(string FileName)
         }
         else
         {
-            inst.label = inst.op;    
-            inst.j = i+1;
-            labels[inst.label] = inst.j;
+            cout<<"error";
         }
         instructions.push_back(inst);
     
@@ -92,6 +91,7 @@ for (int i=0;i<32;i++)
     else
         cout<<" x"<<i<<" :"<<memory[i]<<endl;
 }
+cout<<"----------------------------------------\n";
 
 }
 
@@ -226,12 +226,6 @@ void lw()
 }
 
 
-void jal()
-{
-    
-}
-
-
 //double check
 void slt() 
 {
@@ -288,73 +282,70 @@ void lbu()
     registers[instructions[i].rt] = static_cast<uint32_t>(memory[registers[instructions[i].rs] + instructions[i].imm] & 0xFF);
 }
 
+void jal()
+{
+    registers[instructions[i].rd] = i;
+    i = i + (instructions[i].imm/4);
+    i++;
+}
 
+void jalr() 
+{
+    registers[instructions[i].rd] = i;
+    i = instructions[i].imm + instructions[i].rs;
 
-// void executeBLT(const Instructions &inst, int &pc) //Branch if less than 
-// {
-     
-//         if (registers[inst.rs] < registers[inst.rd]) {
-//             // Branch is taken, update the program counter
-//            // pc += inst.imm;
-//            i+=inst.imm; 
-//         } else {
-//             // Branch not taken, continue to the next instruction
-//             pc += 4; // Assuming each instruction is 4 bytes
-            
-//         }
-// }
-// void blt()
-// {
-//     executeBLT(instructions[i], i); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//     i++;
+}
 
-// }
+void blt()
+{
+    registers[instructions[i].rd] = i;
+    if (registers[instructions[i].rd] < registers[instructions[i].rs])
+    {
+        i = i + (instructions[i].imm/4);
+    }
+    i++;
+}
 
-// void executeBGE(const Instructions &inst)// Branch if greater than 
-// {
-//     if (registers[inst.rs] >= registers[inst.rd])
-//      {
-//             // Branch is taken, update the program counter
-//             i += inst.imm;
-//         } 
-//         else 
-//         {
-//             // Branch not taken, continue to the next instruction
-//             //pc += 4; // Assuming each instruction is 4 bytes
-//             i+=4; 
-//         }
-// }
+void bge()
+{
+    registers[instructions[i].rd] = i;
+    if (registers[instructions[i].rd] > registers[instructions[i].rs])
+    {
+        i = i + (instructions[i].imm/4);
+    }
+    i++;
+}
 
-// void bge()
-// {
-//     executeBGE(instructions[i]); 
-//     i++; 
+void bltu() 
+{
+    registers[instructions[i].rd] = i;
+    if (static_cast<uint32_t>(registers[instructions[i].rd]) < static_cast<uint32_t>(registers[instructions[i].rs]))
+    {
+       i = i + (instructions[i].imm/4);
+    }
+    i++;
+}
 
-// }
+void bgeu()
+{
+    registers[instructions[i].rd] = i;
+    if (static_cast<uint32_t>(registers[instructions[i].rd]) > static_cast<uint32_t>(registers[instructions[i].rs]))
+    {
+       i = i + (instructions[i].imm/4);
+    }
+     i++;
+}
 
-// void executeLH(const Instructions &inst) //Load halfword 
-// {
-//     int baseAddress = registers[inst.rs];
-//     int offset = inst.imm;
-//     int effectiveAddress = baseAddress + offset;
+void lh() 
+{
+    int address = registers[instructions[i].rs] + instructions[i].imm;
 
-//             // Check if the effective address is aligned to a 32-bit boundary
-//     if (effectiveAddress % 4 == 0) 
-//         {
-//             int loadedValue = memory[effectiveAddress / 4];
-//             registers[inst.rd] = static_cast<int16_t>(loadedValue & 0xFFFF);
-//         } 
-//         else 
-//         {
-//             exit(1);
-//         }
-// }
+    int loadedValue = (memory[address] << 16) >> 16;  // Sign-extend to 32 bits
 
-// void lh()
-// {
-//     executeLH(instructions[i]);
-//     i++; 
-// }
+    registers[instructions[i].rt] = loadedValue;
+    i++;
+}
+
 
 // void executeLHU(const Instructions &inst) // Load halfword unsigned 
 // {
@@ -391,52 +382,7 @@ void lbu()
 //         }
 // }
 
-// void lw()
-// {
-//     executeLW(instructions[i]);
-//     i++; 
-// }
-
-// void BGEU() {
-//     if ( static_cast<uint32_t>(registers[instructions[i].rs1]) >= static_cast<uint32_t>(registers[instructions[i].rs2])){
-//         pointer_address += imm;
-//     }
-// }
 
 
-// void BLTU() 
-// {
-//     if (static_cast<uint32_t>(registers[instructions[i].rs1]) < static_cast<uint32_t>(registers[instructions[i].rs2]))
-//     {
-//         pointer_address += imm;
-//     }
-// }
-
-
-// void executeJAL(Instructions& inst, int& pc, int* registers) 
-// {   
-//         registers[inst.rd] = pc; //saves return address (counter i) in rd
-//         pc += inst.imm; //updates the program counter to target address
-// }
-
-// void jal()
-// {
-//     executeJAL(instructions[i], i, registers);
-//     i++;
-// }
-
-
-// void BLTU() {
-//     if (static_cast<uint32_t>(registers[instructions[i].rs1]) < static_cast<uint32_t>(registers[instructions[i].rs2]))
-//     {
-//         pointer_address += imm;
-//     }
-// }
-
-// void BGEU() {
-//     if ( static_cast<uint32_t>(registers[instructions[i].rs1]) >= static_cast<uint32_t>(registers[instructions[i].rs2])){
-//         pointer_address += imm;
-//     }
-// }
 
 

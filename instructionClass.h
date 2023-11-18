@@ -7,6 +7,7 @@ class Instructions
 public:
     string op,label;
     int rd, rs, rt, imm,j;
+    int ra;
 
     Instructions()
     {

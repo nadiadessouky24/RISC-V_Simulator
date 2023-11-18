@@ -10,6 +10,8 @@ int memory[32]= {0};
 
 map<string, inst_func_ptr> inst_map; 
 map<string,int> labels;
+map<string,int>::iterator it; 
+
 
 void initialize_map()
 {
@@ -37,17 +39,12 @@ void initialize_map()
     inst_map.emplace("sltu", &sltu); //22
     inst_map.emplace("lbu", &lbu); //23
     inst_map.emplace("lw", &lw);//24
-
+    inst_map.emplace("jal", &jal);//25
+    inst_map.emplace("blt", &blt);//26
+    inst_map.emplace("bge", &bge);//27
     
-    // inst_map.emplace("jal", &jal);//24
-    // inst_map.emplace("blt", &blt);//25
-    // inst_map.emplace("bge", &bge);//26
     // inst_map.emplace("lh", &lh);//27
     // inst_map.emplace("lhu", &lhu);//28
     // inst_map.emplace("lw", &lw);//29
 }
 
-// void initialize_labelmap()
-// {
-//     labels.emplace(inst.label, inst.j);
-// }

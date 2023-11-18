@@ -11,17 +11,17 @@ void readFile(string FileName);
 
 void executeJAL(Instructions& inst, int& pc, int* registers);
 
-void print();
+void print(); 
 
-void add();
+void add(); 
 
-void addi();
+void addi(); 
 
-void sub();
+void sub(); 
 
-void orfunc();
+void orfunc(); 
 
-void ori();
+void ori(); 
 
 void sll();
 
@@ -61,30 +61,20 @@ void sltu();
 
 void lw();
 
+void jal();
 
+void jalr(); 
 
-//  void jal();
-//  void blt(); 
-//  void bge();
-//  void lh();
-//  void lhu();
-// void lw(); 
+void blt();
 
+void bge();
 
-//void jalr();
+void bltu();
 
+void bgeu();
 
+void lh();
 
-// void BLTU() ;
+void lw(); 
 
-// void BGEU() ;
-
-
-// void SLT() ;
-
-// void SLTU() ;
-
-// void SLTI() ;
-
-// void SLTIU();
 
