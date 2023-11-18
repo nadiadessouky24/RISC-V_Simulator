@@ -22,45 +22,51 @@ void readFile(string FileName)
      {
         sscanf(line, "%s", op);
         inst.op = op;
-        if (inst.op == "add" || inst.op == "sub" || inst.op == "and" || inst.op == "slt" || inst.op == "sltu") 
+        if (inst.op == "add" || inst.op == "sub" || inst.op == "and" || inst.op == "slt" || inst.op == "sltu" || inst.op == "slli" || inst.op == "srli" || inst.op == "srai" || inst.op == "sll" || inst.op == "xor" || inst.op == "srl"|| inst.op == "sra"|| inst.op == "or")  //R-type 
         {
+            //R-type
             sscanf(line, "%s x%d, x%d, x%d", op, &inst.rd, &inst.rs, &inst.rt);
         } 
     
-        else if (inst.op == "addi" || inst.op == "andi" || inst.op == "slti" || inst.op == "lb" || inst.op == "lbu" || inst.op == "blt" || inst.op == "bge" || inst.op == "bltu" || inst.op == "bgeu" || inst.op == "jalr")  //check format of lb and lbu
+        else if (inst.op == "addi" || inst.op == "andi" || inst.op == "slti" || inst.op == "lb" || inst.op == "lbu" || inst.op == "blt" || inst.op == "bge" || inst.op == "bltu" || inst.op == "bgeu" || inst.op == "jalr"|| inst.op == "xori"|| inst.op == "ori"|| inst.op == "sltiu"|| inst.op == "lh"|| inst.op == "lw"|| inst.op == "lhu"|| inst.op == "jalr") //I-type 
         {
+            //I-type
             sscanf(line, "%s x%d, x%d, %d", op, &inst.rd, &inst.rs, &inst.imm);
         } 
-        else if (inst.op == "beq") 
+        else if (inst.op == "beq"|| inst.op == "bne"|| inst.op == "blt"|| inst.op == "bge"|| inst.op == "bltu"|| inst.op == "bgeu") //B-type
         {
+            //B-type
             sscanf(line, "%s x%d, x%d, %d", op, &inst.rs, &inst.rt, &inst.imm);
         } 
-        else if (inst.op == "j")
-        {
-            sscanf(line, "%s %d", op, &inst.imm);
-        }
+        // else if (inst.op == "j")
+        // {
+        //     sscanf(line, "%s %d", op, &inst.imm);
+        // }
 
-         else if (inst.op == "lw" || inst.op == "sw" || inst.op == "sb" || inst.op == "sh") 
+         else if (inst.op == "sw" || inst.op == "sb" || inst.op == "sh") //S-type //lw is not s-type i removed it ~nour
         {
+            //S-type
             sscanf(line, "%s x%d, %d(x%d)", op, &inst.rt, &inst.imm, &inst.rs);
         } 
 
-        else if (inst.op == "jr") 
+        // else if (inst.op == "jr") 
+        // {
+        //     sscanf(line, "%s x%d", op, &inst.rs);
+        // } 
+        else if (inst.op == "jal")//J-type
         {
-            sscanf(line, "%s x%d", op, &inst.rs);
+            //J-type
+            sscanf(line, "%s %d", op, &inst.imm);
         } 
-        else if (inst.op == "jal")
+        else if(inst.op == "lui"|| inst.op == "auipc") 
         {
-            sscanf(line, "%s x%d %d", op, &inst.rd, &inst.imm);
-        } 
-        else if (inst.op == "halt")
-        {
-            sscanf(line, "%s", inst.op);
+            //U-type
+            sscanf(line, "%s %d", op, &inst.rd, &inst.imm);
         }
-        else if (inst.op == "nop")
-        {
-            sscanf(line, "%s", inst.op);
-        }
+        // else if (inst.op == "halt")
+        //  {
+        //     sscanf(line, "%s", inst.op);
+        // }
         else
         {
             cout<<"error";
@@ -200,29 +206,42 @@ void lb()
     i++;
 }
 
-void sw() //there is an error here see it 
-{
-    int effectiveAddress = registers[instructions[i].rs] + (instructions[i].imm) % 4;
+// void sw() //there is an error here see it 
+// {
+//     int effectiveAddress = registers[instructions[i].rs] + (instructions[i].imm) % 4;
 
-    // Store the word from the source register to the calculated memory address
-    memory[effectiveAddress] = (memory[effectiveAddress] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
+//     // Store the word from the source register to the calculated memory address
+//     memory[effectiveAddress] = (memory[effectiveAddress] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
 
-    // Increment the instruction index
+//     // Increment the instruction index
+//     i++;
+// }
+
+void sw() //new sw 
+{ //theres something wrong with the offset i dont understand 
+    int baseAddress = registers[instructions[i].rs];
+    int effectiveAddress = baseAddress + instructions[i].imm;
+
+    // Store the value from the source register to memory
+    memory[effectiveAddress] = registers[instructions[i].rt];
+
     i++;
 }
 
 
-void lw()
-{
-    // Assuming memory, registers, and instructions are global arrays/structures
-    // and i is a global variable indicating the current instruction index
 
-    // Calculate the effective address for the load word operation
+void lw() 
+{
     int effectiveAddress = registers[instructions[i].rs] + instructions[i].imm;
 
-    // Load the word from memory to the destination register
     registers[instructions[i].rt] = memory[effectiveAddress];
     i++;
+}
+
+
+void jal()
+{
+    
 }
 
 
@@ -369,6 +388,21 @@ void lh()
 //     i++; 
 // }
 // void executeLW(const Instructions &inst)
+// {
+//     int baseAddress = registers[inst.rs];
+//     if (baseAddress % 4 == 0) 
+//         {
+//             // Load the 32-bit value from memory into the destination register
+//             registers[inst.rd] = memory[baseAddress / 4];
+//         } 
+//         else 
+//         {
+//             exit(1);
+//         }
+// }
+
+
+// void executeLW(const Instructions &inst) 
 // {
 //     int baseAddress = registers[inst.rs];
 //     if (baseAddress % 4 == 0) 

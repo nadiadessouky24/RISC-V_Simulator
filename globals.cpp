@@ -6,7 +6,7 @@
 int i=0;
 int registers[32]={0};
 int memory[32]= {0};
-
+int offset;
 
 map<string, inst_func_ptr> inst_map; 
 map<string,int> labels;
