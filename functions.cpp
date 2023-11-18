@@ -175,19 +175,6 @@ void srli()
     i++;
 
 }
-
-void sb()
- {
-    memory[registers[instructions[i].rs]] =(memory[instructions[i].imm]& 0xFFFFFF00) | registers[instructions[i].rt]; 
-    i++;
-}
-
-void sh() 
-{
-    memory[registers[instructions[i].rs]] =(memory[instructions[i].imm]& 0xFFFF0000) | registers[instructions[i].rt]; 
-    i++;
-}
-
 void andfunc()
 {
     registers[instructions[i].rd] = registers[instructions[i].rs] & registers[instructions[i].rt];
@@ -200,50 +187,10 @@ void andi()
     i++;
 }
 
-void lb()
-{
-    registers[instructions[i].rt] = (memory[registers[instructions[i].rs] + instructions[i].imm] & 0xFF);
-    i++;
-}
-
-// void sw() //there is an error here see it 
-// {
-//     int effectiveAddress = registers[instructions[i].rs] + (instructions[i].imm) % 4;
-
-//     // Store the word from the source register to the calculated memory address
-//     memory[effectiveAddress] = (memory[effectiveAddress] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
-
-//     // Increment the instruction index
-//     i++;
-// }
-
-void sw() //new sw 
-{ //theres something wrong with the offset i dont understand 
-    int baseAddress = registers[instructions[i].rs];
-    int effectiveAddress = baseAddress + instructions[i].imm;
-
-    // Store the value from the source register to memory
-    memory[effectiveAddress] = registers[instructions[i].rt];
-
-    i++;
-}
 
 
 
-void lw() 
-{
-    int effectiveAddress = registers[instructions[i].rs] + instructions[i].imm;
-
-    registers[instructions[i].rt] = memory[effectiveAddress];
-    i++;
-}
-
-
-void jal()
-{
-    
-}
-
+////////////////// SHIFTS/////////////////
 
 //double check
 void slt() 
@@ -296,11 +243,9 @@ void sltiu()
     }
 }
 
-void lbu() 
-{
-    registers[instructions[i].rt] = static_cast<uint32_t>(memory[registers[instructions[i].rs] + instructions[i].imm] & 0xFF);
-}
 
+
+///////////////// Jumps /////////////////////////////////////
 void jal()
 {
     registers[instructions[i].rd] = i;
@@ -315,6 +260,8 @@ void jalr()
 
 }
 
+
+///////////////////////////////// BRANCHES/////////////////////////////////////
 void blt()
 {
     registers[instructions[i].rd] = i;
@@ -355,6 +302,24 @@ void bgeu()
      i++;
 }
 
+
+
+
+void beq()
+{
+    //still needed
+}
+
+void bne()
+{
+    //still needed
+}
+
+
+
+
+//////////////////// LOAD AND STORE /////////////////////////
+
 void lh() 
 {
     int address = registers[instructions[i].rs] + instructions[i].imm;
@@ -365,58 +330,84 @@ void lh()
     i++;
 }
 
+void lb()
+{
+    registers[instructions[i].rt] = (memory[registers[instructions[i].rs] + instructions[i].imm] & 0xFF);
+    i++;
+}
 
-// void executeLHU(const Instructions &inst) // Load halfword unsigned 
-// {
-//         int baseAddress = registers[inst.rs];
-//         int offset = inst.imm;
-//         int effectiveAddress = baseAddress + offset;
+void lbu() 
+{
+    registers[instructions[i].rt] = static_cast<uint32_t>(memory[registers[instructions[i].rs] + instructions[i].imm] & 0xFF);
+}
 
-//         // Check if the effective address is aligned to a 32-bit boundary
-//         if (effectiveAddress % 4 == 0) {
-//             int loadedValue = memory[effectiveAddress / 4];
-//             registers[inst.rd] = loadedValue & 0xFFFF;
-//         } 
-//         else 
-//         {
-//             exit(1); 
-//         }
-// }
-// void lhu()
+// void sw() //there is an error here see it 
 // {
-//     executeLHU(instructions[i]);
-//     i++; 
-// }
-// void executeLW(const Instructions &inst)
-// {
-//     int baseAddress = registers[inst.rs];
-//     if (baseAddress % 4 == 0) 
-//         {
-//             // Load the 32-bit value from memory into the destination register
-//             registers[inst.rd] = memory[baseAddress / 4];
-//         } 
-//         else 
-//         {
-//             exit(1);
-//         }
+//     int effectiveAddress = registers[instructions[i].rs] + (instructions[i].imm) % 4;
+
+//     // Store the word from the source register to the calculated memory address
+//     memory[effectiveAddress] = (memory[effectiveAddress] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
+
+//     // Increment the instruction index
+//     i++;
 // }
 
+void sw() //new sw 
+{ //theres something wrong with the offset i dont understand 
+    int baseAddress = registers[instructions[i].rs];
+    int effectiveAddress = baseAddress + instructions[i].imm;
 
-// void executeLW(const Instructions &inst) 
-// {
-//     int baseAddress = registers[inst.rs];
-//     if (baseAddress % 4 == 0) 
-//         {
-//             // Load the 32-bit value from memory into the destination register
-//             registers[inst.rd] = memory[baseAddress / 4];
-//         } 
-//         else 
-//         {
-//             exit(1);
-//         }
-// }
+    // Store the value from the source register to memory
+    memory[effectiveAddress] = registers[instructions[i].rt];
+
+    i++;
+}
 
 
+
+void lw() 
+{
+    int effectiveAddress = registers[instructions[i].rs] + instructions[i].imm;
+
+    registers[instructions[i].rt] = memory[effectiveAddress];
+    i++;
+}
+
+
+void sb()
+ {
+    memory[registers[instructions[i].rs]] =(memory[instructions[i].imm]& 0xFFFFFF00) | registers[instructions[i].rt]; 
+    i++;
+}
+
+void sh() 
+{
+    memory[registers[instructions[i].rs]] =(memory[instructions[i].imm]& 0xFFFF0000) | registers[instructions[i].rt]; 
+    i++;
+}
+
+
+
+
+
+
+//////////////////////////////// LUI and AUPIC //////////////////////////////////
+
+void lui() //load upper immediate
+{
+    registers[instructions[i].rd] = instructions[i].imm << 12;
+    i++;
+    //imm is 20-bits, 
+    //load constants or addresses into a register when the lower 12 bits are known to be zero.
+}
+
+void auipc() //add upper immediate to program counter
+{
+    //registers[instructions[i].rd] = pc + (instructions[i].imm << 12);
+    registers[instructions[i].rd] = i*4 + (instructions[i].imm << 12);
+    i++;
+    // similar to lui, but it adds the immediate value shifted left by 12 bits to the current value of the program counter
+}
 
 
 
