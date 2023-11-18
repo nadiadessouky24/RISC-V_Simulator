@@ -10,6 +10,9 @@ using namespace std;
 
 int main()
 {
+       
+    cout<<"enter starting address: ";
+    cin>>i;
     initialize_map();
     readFile("input.txt");
 
@@ -23,16 +26,14 @@ int main()
 
         Instructions inst = instructions[i];
 
-        if( inst_map.find(inst.op) == inst_map.end() ) // didn't find the key
+        if( inst_map.find(inst.op) == inst_map.end() ) // didn't find the key --> unsupported instruction
         {
+            cout <<"Found unsupported instruction. Exiting...";
             break;
         }
 
         (*inst_map[inst.op])(); //call the function
 
-        // BNE, BNEQ, LUI, AUIPC
-        //
-        
         int pc = i*4; //program counter 
         print();
     };

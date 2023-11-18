@@ -10,8 +10,8 @@ using namespace std;
 
 extern int i;
 extern int registers[32];
-extern int memory[32];
 extern void print();
+extern map<int,int> memory;
 
 extern vector<Instructions> instructions;
 

@@ -90,15 +90,16 @@ for (int i=0;i<32;i++)
 }
 cout<<"----------------------------------------\n";
 cout<<"Memory File: \n";
-for (int i=0;i<32;i++)
-{
-    if (i<10)
-        cout<<" x"<<i<<"  :"<<memory[i]<<endl;
-    else
-        cout<<" x"<<i<<" :"<<memory[i]<<endl;
-}
+    for (auto& it:memory)
+    {
+    cout<<it.first <<":"<<it.second<<endl;
+    }
 cout<<"----------------------------------------\n";
 
+}
+
+void lhu(){
+    //TODO
 }
 
 void add ()
@@ -188,8 +189,6 @@ void andi()
 }
 
 
-
-
 ////////////////// SHIFTS/////////////////
 
 //double check
@@ -264,55 +263,53 @@ void jalr()
 ///////////////////////////////// BRANCHES/////////////////////////////////////
 void blt()
 {
-    registers[instructions[i].rd] = i;
     if (registers[instructions[i].rd] < registers[instructions[i].rs])
     {
-        i = i + (instructions[i].imm/4);
+        i = i + (instructions[i].imm*2);
     }
     i++;
 }
 
 void bge()
 {
-    registers[instructions[i].rd] = i;
-    if (registers[instructions[i].rd] > registers[instructions[i].rs])
+    if (registers[instructions[i].rd] >= registers[instructions[i].rs])
     {
-        i = i + (instructions[i].imm/4);
+        i = i + (instructions[i].imm*2);
     }
     i++;
 }
 
 void bltu() 
 {
-    registers[instructions[i].rd] = i;
     if (static_cast<uint32_t>(registers[instructions[i].rd]) < static_cast<uint32_t>(registers[instructions[i].rs]))
     {
-       i = i + (instructions[i].imm/4);
+        i = i + (instructions[i].imm*2);
     }
     i++;
 }
 
 void bgeu()
 {
-    registers[instructions[i].rd] = i;
     if (static_cast<uint32_t>(registers[instructions[i].rd]) > static_cast<uint32_t>(registers[instructions[i].rs]))
     {
-       i = i + (instructions[i].imm/4);
+        i = i + (instructions[i].imm*2);
     }
      i++;
 }
 
 
-
-
 void beq()
 {
-    //still needed
+    if (registers[instructions[i].rd] == registers[instructions[i].rs])
+    {
+        i = i + (instructions[i].imm*2);
+    }
+    i++;
 }
 
 void bne()
 {
-    //still needed
+   
 }
 
 
@@ -341,28 +338,16 @@ void lbu()
     registers[instructions[i].rt] = static_cast<uint32_t>(memory[registers[instructions[i].rs] + instructions[i].imm] & 0xFF);
 }
 
-// void sw() //there is an error here see it 
-// {
-//     int effectiveAddress = registers[instructions[i].rs] + (instructions[i].imm) % 4;
 
-//     // Store the word from the source register to the calculated memory address
-//     memory[effectiveAddress] = (memory[effectiveAddress] & 0xFFFFFFF0) | (registers[instructions[i].rt] & 0xF);
-
-//     // Increment the instruction index
-//     i++;
-// }
-
-void sw() //new sw 
-{ //theres something wrong with the offset i dont understand 
+void sw() 
+{ 
     int baseAddress = registers[instructions[i].rs];
     int effectiveAddress = baseAddress + instructions[i].imm;
 
     // Store the value from the source register to memory
     memory[effectiveAddress] = registers[instructions[i].rt];
-
     i++;
 }
-
 
 
 void lw() 

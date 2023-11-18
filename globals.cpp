@@ -5,13 +5,11 @@
 
 int i=0;
 int registers[32]={0};
-int memory[32]= {0};
 int offset;
 
 map<string, inst_func_ptr> inst_map; 
 map<string,int> labels;
-map<string,int>::iterator it; 
-
+map<int,int> memory;
 
 void initialize_map()
 {
@@ -42,9 +40,8 @@ void initialize_map()
     inst_map.emplace("jal", &jal);//25
     inst_map.emplace("blt", &blt);//26
     inst_map.emplace("bge", &bge);//27
-    
-    // inst_map.emplace("lh", &lh);//27
-    // inst_map.emplace("lhu", &lhu);//28
-    // inst_map.emplace("lw", &lw);//29
+    inst_map.emplace("lh", &lh);//28
+    inst_map.emplace("lhu", &lhu);//29
+    inst_map.emplace("lw", &lw);//30
 }
 
