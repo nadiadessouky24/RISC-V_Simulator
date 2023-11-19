@@ -12,9 +12,10 @@ int main()
 {
        
     cout<<"enter starting address: ";
-    cin>>i;
+    //  cin>>i;
+    i=0;
     initialize_map();
-    readFile("input.txt");
+    readFile("testCase1.txt");
 
     while(true)
     {
@@ -36,6 +37,7 @@ int main()
 
         int pc = i*4; //program counter 
         print();
+        // cout<<i<<endl;
     };
     return 0;
 }

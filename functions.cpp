@@ -7,20 +7,33 @@
 #include "instructionClass.h"
 #include "global.h"
 #include "functions.h"
+#include <cctype> // for tolower function
+
+
 using namespace std; 
 
 vector<Instructions> instructions;
+
+
+void convertToLowerCase(char str[]) {
+    // Iterate through each character in the string
+    for (int i = 0; str[i] != '\0'; ++i) {
+        // Convert each character to lowercase
+        str[i] = std::tolower(str[i]);
+    }
+}
 
 
 void readFile(string FileName)
 {
     FILE *fp = fopen(FileName.c_str(), "r");
     char line[100];
-    Instructions inst;
     char op[100];
     while (fgets(line, 100, fp) != NULL)
      {
+        Instructions inst;
         sscanf(line, "%s", op);
+        convertToLowerCase(op);
         inst.op = op;
         if (inst.op == "add" || inst.op == "sub" || inst.op == "and" || inst.op == "slt" || inst.op == "sltu" || inst.op == "slli" || inst.op == "srli" || inst.op == "srai" || inst.op == "sll" || inst.op == "xor" || inst.op == "srl"|| inst.op == "sra"|| inst.op == "or" || inst.op == "xor")  //R-type 
         {
@@ -46,7 +59,7 @@ void readFile(string FileName)
         else if (inst.op == "jal")//J-type
         {
             //J-type
-            sscanf(line, "%s %d", op, &inst.imm);
+            sscanf(line, "%s x%d, %d", op, &inst.rd,&inst.imm);
         } 
         else if(inst.op == "lui"|| inst.op == "auipc") 
         {
@@ -87,34 +100,34 @@ cout<<"----------------------------------------\n";
 
 void add ()
 {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
        registers[instructions[i].rd] = 0;
     }
     else 
     {
         registers[instructions[i].rd] = registers[instructions[i].rs] + registers[instructions[i].rt];
-        i++;
     }
+    i++;
     
 }
 
 void addi()
 {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
     }
     else
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] + instructions[i].imm;
-    i++;
     }
+    i++;
 }
 
 void sub()
 {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -122,13 +135,13 @@ void sub()
     else
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] - registers[instructions[i].rt];
-    i++;
     }
+    i++;
 }
 
 void orfunc()
 {
-   if (instructions[i].rd == "x0")
+   if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -136,13 +149,13 @@ void orfunc()
     else
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] | registers[instructions[i].rt];
-    i++;
     }
+    i++;
 }
 
 void ori()
 {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -150,13 +163,13 @@ void ori()
     else
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] | instructions[i].imm;
-    i++;
     }
+    i++;
 }
 
 void sll()
 {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -164,13 +177,13 @@ void sll()
     else
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] * (2* registers[instructions[i].rt]);
-    i++;
     }
+    i++;
 }
 
 void slli()
 {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -178,12 +191,12 @@ void slli()
     else
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] * (2* instructions[i].imm);
-    i++;
     }
+    i++;
 }
 void xorfunc()
 {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -191,12 +204,13 @@ void xorfunc()
     else 
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] ^ registers[instructions[i].rt];
-    i++;
+    
     }
+    i++;
 }
 void xori()
 {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -204,12 +218,13 @@ void xori()
     else 
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] ^ instructions[i].imm;
-    i++;
     }
+    i++;
+
 }
 void sra()
 {
-  if (instructions[i].rd == "x0")
+  if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -217,12 +232,12 @@ void sra()
     else 
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] >> registers[instructions[i].rt];
-    i++;
     }
+    i++;
 }
 void srai()
 {
-  if (instructions[i].rd == "x0")
+  if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -230,13 +245,13 @@ void srai()
     else 
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] >> instructions[i].imm;
-    i++;
     }
+    i++;
 }
 
 void srl()
 {
-  if (instructions[i].rd == "x0")
+  if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -244,13 +259,13 @@ void srl()
     else 
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] / (2* registers[instructions[i].rt]);
-    i++;
     }
+    i++;
 }
 
 void srli()
 {
-  if (instructions[i].rd == "x0")
+  if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -258,13 +273,13 @@ void srli()
     else 
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] / (2* instructions[i].rt);
-    i++;
     }
-
+    i++;
 }
+
 void andfunc()
 {
-  if (instructions[i].rd == "x0")
+  if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -272,22 +287,22 @@ void andfunc()
     else 
     {
     registers[instructions[i].rd] = registers[instructions[i].rs] & registers[instructions[i].rt];
-    i++;
     }
+    i++;
 }
 
 void andi()
 {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
     }
     else 
     {
-    registers[instructions[i].rd] = registers[instructions[i].rs] & instructions[i].rt;
-    i++;
+       registers[instructions[i].rd] = (signed int)registers[instructions[i].rs] & (signed int)instructions[i].imm;
     }
+    i++;
 }
 
 
@@ -295,7 +310,7 @@ void andi()
 
 void slt() 
 {
-      if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -311,11 +326,12 @@ void slt()
             registers[instructions[i].rd] = 0;
         }
     }
+    i++;
 }
 
 void sltu()
  {
-    if (instructions[i].rd == "x0")
+    if (instructions[i].rd == 0)
     {
         registers[instructions[i].rd] = 0;
 
@@ -331,12 +347,18 @@ void sltu()
             registers[instructions[i].rd] = 0;
         }
     }
+    i++;
 }
-
-// stopped here 
 
 void slti() 
 {
+    if (instructions[i].rd == 0)
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     if(registers[instructions[i].rs] < instructions[i].imm)
     {
     registers[instructions[i].rd] = 1;
@@ -345,10 +367,19 @@ void slti()
     {
         registers[instructions[i].rd] = 0;
     }
+    }
+    i++;
 }
 
 void sltiu() 
 {
+    if (instructions[i].rd == 0)
+    {
+        registers[instructions[i].rd] = 0;
+
+    }
+    else 
+    {
     if(static_cast<uint32_t>(registers[instructions[i].rs]) < static_cast<uint32_t>(instructions[i].imm))
     {
         registers[instructions[i].rd] = 1;
@@ -357,6 +388,8 @@ void sltiu()
     {
         registers[instructions[i].rd] = 0;
     }
+    }
+    i++;
 }
 
 
@@ -364,16 +397,14 @@ void sltiu()
 ///////////////// Jumps /////////////////////////////////////
 void jal()
 {
-    registers[instructions[i].rd] = i;
-    i = i + (instructions[i].imm/4);
-    i++;
+    registers[instructions[i].rd] = (i+1)*4;
+    i = i + ((instructions[i].imm*2)/4);
 }
 
 void jalr() 
 {
-    registers[instructions[i].rd] = i;
-    i = instructions[i].imm + instructions[i].rs;
-
+    registers[instructions[i].rd] = (i+1)*4; 
+    i = ((instructions[i].imm*2)/4) + instructions[i].rs;
 }
 
 
@@ -382,7 +413,7 @@ void blt()
 {
     if (registers[instructions[i].rd] < registers[instructions[i].rs])
     {
-        i = i + (instructions[i].imm*2);
+        i = i + ((instructions[i].imm*2)/4);
     }
     i++;
 }
@@ -391,7 +422,7 @@ void bge()
 {
     if (registers[instructions[i].rd] >= registers[instructions[i].rs])
     {
-        i = i + (instructions[i].imm*2);
+        i = i + ((instructions[i].imm*2)/4);
     }
     i++;
 }
@@ -400,7 +431,7 @@ void bltu()
 {
     if (static_cast<uint32_t>(registers[instructions[i].rd]) < static_cast<uint32_t>(registers[instructions[i].rs]))
     {
-        i = i + (instructions[i].imm*2);
+        i = i + ((instructions[i].imm*2)/4);
     }
     i++;
 }
@@ -409,7 +440,7 @@ void bgeu()
 {
     if (static_cast<uint32_t>(registers[instructions[i].rd]) > static_cast<uint32_t>(registers[instructions[i].rs]))
     {
-        i = i + (instructions[i].imm*2);
+        i = i + ((instructions[i].imm*2)/4);
     }
      i++;
 }
@@ -419,7 +450,7 @@ void beq()
 {
     if (registers[instructions[i].rd] == registers[instructions[i].rs])
     {
-        i = i + (instructions[i].imm*2);
+        i = i + ((instructions[i].imm*2)/4);
     }
     i++;
 }
@@ -428,7 +459,7 @@ void bne()
 {
     if (registers[instructions[i].rd] != registers[instructions[i].rs])
     {
-        i = i + (instructions[i].imm*2);
+        i = i + ((instructions[i].imm*2)/4);
     }
     i++;
 }
@@ -504,16 +535,13 @@ void lui() //load upper immediate
 {
     registers[instructions[i].rd] = instructions[i].imm << 12;
     i++;
-    //imm is 20-bits, 
-    //load constants or addresses into a register when the lower 12 bits are known to be zero.
+ 
 }
 
 void auipc() //add upper immediate to program counter
 {
-    //registers[instructions[i].rd] = pc + (instructions[i].imm << 12);
     registers[instructions[i].rd] = i*4 + (instructions[i].imm << 12);
     i++;
-    // similar to lui, but it adds the immediate value shifted left by 12 bits to the current value of the program counter
 }
 
 
