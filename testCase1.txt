@@ -2,7 +2,7 @@ ADDI x5,x0,10
 ADDI x6,x0,5
 ADD x7,x5,x6
 SUB x28,x5,x6
-AND x29,x5,x6
+ADDI x29,x2,1
 OR x30,x5,x6
 XOR x31,x5,x6
 XORI x7,x30,-1

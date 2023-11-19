@@ -8,6 +8,7 @@
 #include "global.h"
 #include "functions.h"
 #include <cctype> // for tolower function
+#include <bitset>
 
 
 using namespace std; 
@@ -66,12 +67,15 @@ void readFile(string FileName)
             //U-type
             sscanf(line, "%s %d", op, &inst.rd, &inst.imm);
         }
+        else if(inst.op == "ecall"|| inst.op == "ebreak"|| inst.op == "fence") 
+        {
+            sscanf(line, "%s", op);
+        }
         else
         {
             cout<<"error:unknown instruction";
         }
         instructions.push_back(inst);
-    
     }
 }
 
@@ -83,20 +87,32 @@ cout<<"Register File: \n";
 for (int i=0;i<32;i++)
 {
     if (i<10)
-        cout<<" x"<<i<<"  :"<<registers[i]<<endl;
-    else
-        cout<<" x"<<i<<" :"<<registers[i]<<endl;
+    {
+        cout<<" x"<<i<<"(in decimal)"<<"  :"<<registers[i]<<"    ";
+        cout<<"  x"<<i<<"(in hexadecimal)"<<hex<<uppercase<<(registers[i])<<"    ";
+        cout<<"  x"<<i<<"(in binary)"<<bitset<sizeof(int) * 8>(registers[i])<<endl;
+        cout << dec;
+    }
+    else if (i>=10)
+    {
+        cout<<" x"<<i<<"(in decimal)"<<" :"<<registers[i]<<"     ";
+        cout<<"  x"<<i<<"(in hexadecimal)"<<hex<<uppercase<<(registers[i])<<"   ";
+        cout<<"  x"<<i<<"(in binary)"<<bitset<sizeof(int) * 8>(registers[i])<<endl;
+        cout << dec;
+    }
 }
 cout<<"----------------------------------------\n";
 cout<<"Memory File: \n";
     for (auto& it:memory)
     {
     cout<<it.first <<":"<<it.second<<endl;
+    cout<<it.first <<":"<<hex<<uppercase<<it.second<<endl;
+    cout << dec;
+    cout<<bitset<sizeof(int) * 8>(it.first) <<":"<<it.second<<endl;
     }
 cout<<"----------------------------------------\n";
 
 }
-
 
 void add ()
 {
@@ -524,7 +540,7 @@ void sb()
 
 void sh() 
 {
-    memory[registers[instructions[i].rs]] =(memory[instructions[i].imm]& 0xFFFF0000) | registers[instructions[i].rt]; 
+    memory[registers[instructions[i].rs]] = (memory[instructions[i].imm]& 0xFFFF0000) | registers[instructions[i].rt]; 
     i++;
 }
 
@@ -535,7 +551,6 @@ void lui() //load upper immediate
 {
     registers[instructions[i].rd] = instructions[i].imm << 12;
     i++;
- 
 }
 
 void auipc() //add upper immediate to program counter
@@ -544,5 +559,9 @@ void auipc() //add upper immediate to program counter
     i++;
 }
 
+void finishtheporgram()
+{
+    i = instructions.size();
+}
 
 

@@ -60,4 +60,5 @@ void orfunc();//36
 void andfunc();//37
 
 
+void finishtheporgram();
 

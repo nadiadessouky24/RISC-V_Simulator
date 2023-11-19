@@ -1,0 +1,16 @@
+ADDI x9,x0,0 
+ADDI x2,x2,-4
+SW x1,0(x2) 
+ADDI x18,x0,0 
+BEQ x18,x11,32
+SLLI x19,x18,2 
+ADD x20,x10,x19
+LW x21,0(x20)
+BLT x21,x9,8
+ADDI x9,x21,0
+ADDI x18,x18,1
+BEQ x0,x0,-28
+ADDI x10,x9,0
+LW x1,0(x2)
+ADDI x2,x2,4
+JALR x0,0(x1)

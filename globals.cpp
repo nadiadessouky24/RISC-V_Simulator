@@ -50,5 +50,8 @@ void initialize_map()
     inst_map.emplace("beq", &beq);//35
     inst_map.emplace("bne", &bne);//36
     inst_map.emplace("sltiu", &sltiu);//37
+    inst_map.emplace("ebreak", &finishtheporgram);//38
+    inst_map.emplace("ecall", &finishtheporgram);//39
+    inst_map.emplace("fence", &finishtheporgram);//40
 }
 

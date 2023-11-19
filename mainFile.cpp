@@ -12,8 +12,22 @@ int main()
 {
        
     cout<<"enter starting address: ";
-    //  cin>>i;
-    i=0;
+    cin>>i;
+
+    int x;
+    cout<<"how many memory addresses do you wish to input? ";
+    cin>>x;
+    for (int y =0;y<x;y++)
+    {
+        int address;
+        int value; 
+        cout<<"enter address: ";
+        cin>>address;
+        cout<<"enter value: ";
+        cin>>value;
+        memory[address] = value;
+    }
+
     initialize_map();
     readFile("testCase1.txt");
 
